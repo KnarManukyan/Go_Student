@@ -118,15 +118,15 @@ const update = function(){
 	document.addEventListener('keydown', function(event) {
 		//Tigran work on this part!!!
 		if(event.keyCode === leftKey) {
-      			hero.x -= xDelta;
+      			hero.x -= hero.xDelta;
    	    		if (hero.x <= 0){
-      				hero.x=canvas.width+hero.w;
+      				hero.x=canvas.width-hero.w;
       			} 
   		} 
 		else if(event.keyCode === rightKey) {
   	    		hero.x += hero.xDelta;
       			if (hero.x >= canvas.width){
-      				hero.x= (hero.w);
+      				hero.x= 0;
       			}
       		}
       		else if (event.keyCode === upKey) {
