@@ -6,32 +6,32 @@ const rand = function(num) {
 }
 
 const heroImg1 = new Image();
-heroImg1.src = "js/images/1.png";
+heroImg1.src = "1.png";
 const heroImg2 = new Image();
-heroImg2.src = "js/images/2.png";
+heroImg2.src = "2.png";
 const heroImg3 = new Image();
-heroImg3.src = "js/images/3.png";
+heroImg3.src = "3.png";
 const heroImg4 = new Image();
-heroImg4.src = "js/images/4.png";
+heroImg4.src = "4.png";
 const heroImg5 = new Image();
-heroImg5.src = "js/images/5.png";
+heroImg5.src = "5.png";
 const heroImg6 = new Image();
-heroImg6.src = "js/images/6.png";
+heroImg6.src = "6.png";
 const heroImg7 = new Image();
-heroImg7.src = "js/images/7.png";
+heroImg7.src = "7.png";
 const heroImg8 = new Image();
-heroImg8.src = "js/images/8.png";
+heroImg8.src = "8.png";
 
 const multimouthImg = new Image();
-multimouthImg.src = "js/images/multimouth.png";
+multimouthImg.src = "multimouth.png";
 const devilImg = new Image();
-devilImg.src = "js/images/devil.png";
+devilImg.src = "devil.png";
 const octopusImg = new Image();
-octopusImg.src = "js/images/octopus.png";
+octopusImg.src = "octopus.png";
 const ninjaImg = new Image();
-ninjaImg.src = "js/images/ninja.png";
+ninjaImg.src = "ninja.png";
 const background1 = new Image();
-background1.src = "js/images/cafeteria.jpg";
+background1.src = "cafeteria.jpg";
 
 const leftKey = 37;
 const upKey = 38;
@@ -52,7 +52,7 @@ const gameData = {
         multimouth: {
             pic: multimouthImg,
             x: 150,
-            y: 000,
+            y: 0,
             xDelta: 0,
             yDelta: 0,
             w: 250,
@@ -61,7 +61,7 @@ const gameData = {
         devil: {
             pic: devilImg,
             x: 450,
-            y: 000,
+            y: 0,
             xDelta: 0,
             yDelta: 0,
             w: 250,
@@ -70,7 +70,7 @@ const gameData = {
         octopus: {
             pic: octopusImg,
             x: 700,
-            y: 000,
+            y: 0,
             xDelta: 0,
             yDelta: 0,
             w: 250,
