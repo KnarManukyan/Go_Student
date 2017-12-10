@@ -1,182 +1,197 @@
-const canvas = document.getElementById('canvas');
-const context = canvas.getContext('2d');
+<!DOCTYPE html>
+<html>
 
-const rand = function(num) {
-    return Math.floor(Math.random() * num);
-}
+<body>
+    <canvas id="canvas" width="1000" height="600">
+    </canvas>
+    <script>
+        const canvas = document.getElementById('canvas');
+        const context = canvas.getContext('2d');
 
-const heroImg = new Image();
-heroImg.src = "js/images/hero.png";
-const multimouthImg = new Image();
-multimouthImg.src = "js/images/multimouth.png";
-const devilImg = new Image();
-devilImg.src = "js/images/devil.png";
-const octopusImg = new Image();
-octopusImg.src = "js/images/octopus.png";
-const ninjaImg = new Image();
-ninjaImg.src = "js/images/ninja.png";
-
-const leftKey = 37;
-const upKey = 38;
-const rightKey = 39;
-
-const gameData = {
-
-    hero: {
-        pic: heroImg,
-        x: 1,
-        y: 250,
-        xDelta: 0,
-        yDelta: 0,
-        h: 180,
-        w: 100,
-    },
-    monsters: {
-        multimouth: {
-            pic: multimouthImg,
-            x: 0,
-            y: 0,
-            xDelta: 0,
-            yDelta: 0,
-            h: 0,
-            w: 0,			
-        },
-        devil: {
-            pic: devilImg,
-            x: 0,
-            y: 0,
-            xDelta: 0,
-            yDelta: 0,
-            h: 0,
-            w: 0,			
-        },
-        octopus: {
-            pic: octopusImg,
-            x: 0,
-            y: 0,
-            xDelta: 0,
-            yDelta: 0,
-            h: 0,
-            w: 0,			
-        }/*,
-        exam: {
-            pic: ,
-            x: ,
-            y: ,
-            xDelta: ,
-            yDelta: ,
-            h: ,
-            w: ,			
-        }*/
-    },
-    ninja: {
-        pic: ninjaImg,
-        x: 0,
-        y: 0,
-        xDelta: 0,
-        yDelta: 0,
-        h: 0,
-        w: 0,		
-    },
-    score: {
-        score: 0,
-        APoint: 0,
-        FPoint: 0
-    }
-} 
-
-const hero = gameData.hero;
-const multimouth = gameData.monsters.multimouth;
-const octopus = gameData.monsters.octopus;
-const devil = gameData.monsters.devil;
-const exam = gameData.monsters.exam;
-const ninja = gameData.ninja;
-const monsters = [multimouth, octopus, devil/*, exam*/];
-var isJumping = false;
-
-const forEach = function(arr, func) {
-    const helper = function(index) {
-        if(index === arr.length){
-            return;
+        const rand = function(num) {
+            return Math.floor(Math.random() * num);
         }
-        func(arr[index]);   
-        helper(index+1);    
+
+        const heroImg = new Image();
+        heroImg.src = "js/images/hero.png";
+        const multimouthImg = new Image();
+        multimouthImg.src = "js/images/multimouth.png";
+        const devilImg = new Image();
+        devilImg.src = "js/images/devil.png";
+        const octopusImg = new Image();
+        octopusImg.src = "js/images/octopus.png";
+        const ninjaImg = new Image();
+        ninjaImg.src = "js/images/ninja.png";
+
+        const leftKey = 37;
+        const upKey = 38;
+        const rightKey = 39;
+
+        const gameData = {
+
+            hero: {
+                pic: heroImg,
+                x: 1,
+                y: 250,
+                xDelta: 0,
+                yDelta: 0,
+                h: 180,
+                w: 100,
+            },
+            monsters: {
+                multimouth: {
+                    pic: multimouthImg,
+                    x: 0,
+                    y: 0,
+                    xDelta: 0,
+                    yDelta: 0,
+                    h: 0,
+                    w: 0,
+                },
+                devil: {
+                    pic: devilImg,
+                    x: 0,
+                    y: 0,
+                    xDelta: 0,
+                    yDelta: 0,
+                    h: 0,
+                    w: 0,
+                },
+                octopus: {
+                    pic: octopusImg,
+                    x: 0,
+                    y: 0,
+                    xDelta: 0,
+                    yDelta: 0,
+                    h: 0,
+                    w: 0,
+                }
+                /*,
+                        exam: {
+                            pic: ,
+                            x: ,
+                            y: ,
+                            xDelta: ,
+                            yDelta: ,
+                            h: ,
+                            w: ,			
+                        }*/
+            },
+            ninja: {
+                pic: ninjaImg,
+                x: 0,
+                y: 0,
+                xDelta: 0,
+                yDelta: 0,
+                h: 0,
+                w: 0,
+            },
+            score: {
+                score: 0,
+                APoint: 0,
+                FPoint: 0
+            }
         }
-    helper(0);
 
-}
+        const hero = gameData.hero;
+        const multimouth = gameData.monsters.multimouth;
+        const octopus = gameData.monsters.octopus;
+        const devil = gameData.monsters.devil;
+        const exam = gameData.monsters.exam;
+        const ninja = gameData.ninja;
+        const monsters = [multimouth, octopus, devil /*, exam*/ ];
+        var isJumping = false;
 
-const draw = function() {
+        const forEach = function(arr, func) {
+            const helper = function(index) {
+                if (index === arr.length) {
+                    return;
+                }
+                func(arr[index]);
+                helper(index + 1);
+            }
+            helper(0);
 
-    forEach(monsters, function(monsters){
-        context.drawImage(monsters.pic, monsters.x, monsters.y, monsters.h, monsters.w);
-    }) 
+        }
 
-    context.drawImage(hero.pic, hero.x, hero.y, hero.w, hero.h);
-    context.drawImage(ninja.pic, ninja.x, ninja.y, ninja.h, ninja.w);
-    move();
-}
+        const draw = function() {
 
-const move = function(){
+            forEach(monsters, function(monsters) {
+                context.drawImage(monsters.pic, monsters.x, monsters.y, monsters.h, monsters.w);
+            })
 
-    hero.x += hero.xDelta;
+            context.drawImage(hero.pic, hero.x, hero.y, hero.w, hero.h);
+            context.drawImage(ninja.pic, ninja.x, ninja.y, ninja.h, ninja.w);
+            move();
+        }
 
-    if (hero.x >= canvas.width-hero.w){
-        hero.x=canvas.width-hero.w;
-    }
-    if (hero.x <= 0){
-        hero.x= 0;
-    }
-}
+        const move = function() {
 
-const update = function(){
-    //collision and movement
-    hero.x += hero.xDelta;
-    hero.y += hero.yDelta;
-}
+            hero.x += hero.xDelta;
 
-const stopJump = function(){
-    hero.yDelta = 0;
-    isJumping = false;
-}
-const fall = function(){
-    hero.yDelta = 5;
-    setTimeout(stopJump,500);
-}
-const jump = function(){
-    hero.yDelta = -5;
-    setTimeout(fall,500);
-}
+            if (hero.x >= canvas.width - hero.w) {
+                hero.x = canvas.width - hero.w;
+            }
+            if (hero.x <= 0) {
+                hero.x = 0;
+            }
+        }
 
-const loop = function(){
+        const update = function() {
+            //collision and movement
+            hero.x += hero.xDelta;
+            hero.y += hero.yDelta;
+        }
 
-    context.clearRect(0,0,1200,600);
-    update();
-    draw();
-    requestAnimationFrame(loop);
-}
+        const stopJump = function() {
+            hero.yDelta = 0;
+            isJumping = false;
+        }
+        const fall = function() {
+            hero.yDelta = 5;
+            setTimeout(stopJump, 500);
+        }
+        const jump = function() {
+            hero.yDelta = -5;
+            setTimeout(fall, 500);
+        }
 
-loop();
+        const loop = function() {
 
-document.addEventListener('keydown', function(event) {
+            context.clearRect(0, 0, 1200, 600);
+            update();
+            draw();
+            requestAnimationFrame(loop);
+        }
 
-    if(event.keyCode === leftKey) {
-        hero.xDelta = -5;
-    }
-    if(event.keyCode === rightKey) {
-        hero.xDelta = 5;
-    }
-    if (event.keyCode === upKey && isJumping === false) {
-        jump();
-        isJumping = true;
-    }
-}, false);
-document.addEventListener('keyup', function(event){
-    
-    if(event.keyCode === leftKey){
-        hero.xDelta = 0;
-    }
-    if(event.keyCode === rightKey){
-        hero.xDelta = 0;
-    }
-}, false)
+        loop();
+
+        document.addEventListener('keydown', function(event) {
+
+            if (event.keyCode === leftKey) {
+                hero.xDelta = -5;
+            }
+            if (event.keyCode === rightKey) {
+                hero.xDelta = 5;
+            }
+            if (event.keyCode === upKey && isJumping === false) {
+                jump();
+                isJumping = true;
+            }
+        }, false);
+        document.addEventListener('keyup', function(event) {
+
+                if (event.keyCode === leftKey) {
+                    hero.xDelta = 0;
+                }
+                if (event.keyCode === rightKey) {
+                    hero.xDelta = 0;
+                }
+            }, false)
+
+
+            <
+            /body>
+    </script>
+
+</html>
