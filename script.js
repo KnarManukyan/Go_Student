@@ -45,7 +45,7 @@ const gameData = {
 
     hero: {
         pic: [heroImg1,heroImg2,heroImg3,heroImg4,heroImg5,heroImg6,heroImg7,heroImg8],
-        x: -100,
+        x: 0,
         y: 400,
         xDelta: 0,
         yDelta: 0,
@@ -120,8 +120,8 @@ const devil = gameData.monsters.devil;
 const exam = gameData.monsters.exam;
 const ninja = gameData.ninja;
 const monsters = [multimouth, octopus, devil/*, exam*/];
-const APoint = gameData.score.APoint;
-const FPoint = gameData.score.FPoint;
+let APoint = gameData.score.APoint;
+let FPoint = gameData.score.FPoint;
 const score = gameData.score;
 const background = gameData.background;
 const arrayA = [];
@@ -131,7 +131,7 @@ var isFalling = false;
 var imgNum = 0;
 var isMoving = false;
 var level = 1;
-
+let Death = false;
 const forEach = function(arr, func) {
     const helper = function(index) {
         if(index === arr.length){
@@ -196,12 +196,18 @@ const draw = function(){
     context.fillStyle = 'red';    
     context.fillText('X',40,63);    
     context.fillText(FPoint,65,63)
+    if(Death){
+	//this part will be changed -Knarik
+        context.font="100px Arial";
+        context.fillStyle = 'red';    
+        context.fillText("Death!",400,300);
+    }
 
     forEach(monsters, function(monsters){
         context.drawImage(monsters.pic, monsters.x, monsters.y, monsters.w, monsters.h);
     }) 
 
-    context.drawImage(hero.pic[imgNum], hero.x, hero.y, hero.w, hero.h);
+    context.drawImage(hero.pic[imgNum], hero.x-hero.w/3, hero.y, hero.w, hero.h);
     context.drawImage(ninja.pic, ninja.x, ninja.y, ninja.h, ninja.w);
     move();
 }
@@ -225,8 +231,19 @@ const move = function(){
 }
 
 const update = function(){
-    //collision and movement
     hero.y += hero.yDelta;
+    //collision	
+    forEach(monsters, function(monsters){
+        if(hero.x+(hero.w/3)>=monsters.x && hero.x<=monsters.x && 
+           hero.y+hero.h>=monsters.y){
+           if(APoint===0){
+            Death = true;
+           }
+           else{
+            APoint = 0;
+           }
+        }
+    })
 }
 
 const jump = function(){
