@@ -1,8 +1,9 @@
+//if you want to change something tell that in chat then do that. or just upload a seperate file, then we will edit it and add to main one.
 const canvas = document.getElementById('canvas');
 const context = canvas.getContext('2d');
 
 const rand = function(num) {
-    return Math.floor(Math.random() * num+1);
+    return Math.floor(Math.random() * num);
 }
 
 const heroImg1 = new Image();
@@ -55,7 +56,7 @@ const gameData = {
     monsters: {
         multimouth: {
             pic: multimouthImg,
-            x: 50,
+            x: 5000,
             y: floorY,
             xDelta: 10,
             yDelta: 0,
@@ -64,7 +65,7 @@ const gameData = {
         },
         devil: {
             pic: devilImg,
-            x: 450,
+            x: 45000,
             y: floorY,
             xDelta: 10,
             yDelta: 0,
@@ -73,7 +74,7 @@ const gameData = {
         },
         octopus: {
             pic: octopusImg,
-            x: 700,
+            x: 70000,
             y: floorY,
             xDelta: 10,
             yDelta: 0,
@@ -120,8 +121,6 @@ const devil = gameData.monsters.devil;
 const exam = gameData.monsters.exam;
 const ninja = gameData.ninja;
 const monsters = [multimouth, octopus, devil/*, exam*/];
-const APoint = gameData.score.APoint;
-const FPoint = gameData.score.FPoint;
 const score = gameData.score;
 const background = gameData.background;
 const arrayA = [];
@@ -146,7 +145,7 @@ const forEach = function(arr, func) {
 
 const createPoints = function(level){
 
-	const pointsLoop = function(count, arr, pic, point){
+	const pointsLoop = function(count, arr, pic, point, yVal){
 
 		if(count<=0){
 			return;
@@ -155,19 +154,19 @@ const createPoints = function(level){
 		point[arr] = {
             img: pic,
             x: rand(19*background.w),
-            y: rand(300)+300,
+            y: rand(200)+yVal
         }
 
-		return pointsLoop(count-1,arr+1, pic, point);
+		return pointsLoop(count-1,arr+1, pic, point, yVal);
 	}
 
-    pointsLoop(score.lvlCountA[level-1], 0, APointImg, arrayA);
-    pointsLoop(score.lvlCountF[level-1], 0, FPointImg, arrayF);
+    pointsLoop(score.lvlCountA[level-1], 0, APointImg, arrayA, 300);
+    pointsLoop(score.lvlCountF[level-1], 0, FPointImg, arrayF, 400);
 }
 createPoints(1);
 
 const drawPoints = function(){
-	
+    
     const makePoints = function(arr,point,img){
 
         if(arr === point.length){
@@ -175,13 +174,12 @@ const drawPoints = function(){
         }
 
         context.drawImage(img,point[arr].x,point[arr].y,30,30);
-        return makePoints(arr+1);
+        makePoints(arr+1,point,img);
     }
 
     makePoints(0,arrayA,APointImg);
     makePoints(0,arrayF,FPointImg);
 }
-
 
 const draw = function(){
 
@@ -194,10 +192,10 @@ const draw = function(){
     context.drawImage(FPointImg,0,40,30,30);
     context.fillStyle = 'yellow';
     context.fillText('X',40,21);
-    context.fillText(APoint,65,21)
+    context.fillText(score.APoint,65,21)
     context.fillStyle = 'red';    
     context.fillText('X',40,63);    
-    context.fillText(FPoint,65,63);
+    context.fillText(score.FPoint,65,63);
 	
     if(Death){
         context.font="100px Arial";
@@ -228,6 +226,12 @@ const move = function(){
 
     if(isMoving === true){
         background.x -= 5;
+        for(i=0;i<=arrayA.length-1;i++){
+            arrayA[i].x -= 5;
+        }
+        for(i=0;i<=arrayF.length-1;i++){
+            arrayF[i].x -= 5;
+        }
     }
     
 }
@@ -236,20 +240,35 @@ const update = function(){
 	
     hero.y += hero.yDelta;
 
-    forEach(monsters, function(monsters){
-        if(hero.x + (hero.w/3) >= monsters.x && hero.x <= monsters.x && hero.y + hero.h >= monsters.y){
-           if(APoint === 0){
-            Death = true;
-           }
-           else{
-            APoint = 0;
-           }
-        }
-    })
+    // forEach(monsters, function(monsters){
+    //     if(hero.x + (hero.w/3) >= monsters.x && hero.x <= monsters.x && hero.y + hero.h >= monsters.y){
+    //        if(APoint === 0){
+    //         Death = true;
+    //        }
+    //        else{
+    //         APoint = 0;
+    //        }
+    //     }
+    // })
 
-    forEach(monsters, function (monsters) {
-        monsters.x -= monsters.xDelta
-    })
+    // forEach(monsters, function (monsters) {
+    //     monsters.x -= monsters.xDelta
+    // })
+
+    for(i=0;i<=arrayA.length-1;i++){
+        if(arrayA[i].x <= hero.x + hero.w/3 && arrayA[i].x + 30 >= hero.x &&
+           arrayA[i].y <= hero.y + hero.h && arrayA[i].y + 30 >= hero.h){
+               arrayA[i].y = 1000;
+               score.APoint++;
+           }
+    }
+    for(i=0;i<=arrayF.length-1;i++){
+        if(arrayF[i].x <= hero.x + hero.w/3 && arrayF[i].x + 30 >= hero.x &&
+           arrayF[i].y <= hero.y + hero.h && arrayF[i].y + 30 >= hero.h){
+               arrayF[i].y = 1000;
+               score.FPoint++;
+           }
+    }
 }
 
 const jump = function(){
@@ -257,13 +276,13 @@ const jump = function(){
     if(isJumping === true){
         imgNum = 4;
         if(isFalling === false){
-            hero.yDelta = -5;
+            hero.yDelta = -7.5;
 
-            if(hero.y === 100){
+            if(hero.y === 50){
                 isFalling = true;
             }
         } else {
-            hero.yDelta = 5;
+            hero.yDelta = 7.5;
             if(hero.y === floorY){
                 isJumping = false;
                 isFalling = false;
@@ -279,7 +298,7 @@ const loop = function(){
     update();
     draw();
     jump();
-    // drawPoints();
+    drawPoints();
     requestAnimationFrame(loop);
 }
 
@@ -315,7 +334,8 @@ const monsterpos = function(){
 
     })
 }
-monsterpos();
+// monsterpos();
+
 loop();
 
 document.addEventListener('keydown', function(event) {
