@@ -2,7 +2,7 @@ const canvas = document.getElementById('canvas');
 const context = canvas.getContext('2d');
 
 const rand = function(num) {
-    return Math.floor(Math.random() * num);
+    return Math.floor(Math.random() * num+1);
 }
 
 const heroImg1 = new Image();
@@ -40,24 +40,24 @@ FPointImg.src = "F-Point.png";
 const leftKey = 37;
 const upKey = 38;
 const rightKey = 39;
-
+const floorY=350;
 const gameData = {
 
     hero: {
         pic: [heroImg1,heroImg2,heroImg3,heroImg4,heroImg5,heroImg6,heroImg7,heroImg8],
         x: 0,
-        y: 400,
+        y: floorY,
         xDelta: 0,
         yDelta: 0,
-        w: 300,
-        h: 200
+        w: 350,
+        h: 250
     },
     monsters: {
         multimouth: {
             pic: multimouthImg,
-            x: 150,
-            y: 000,
-            xDelta: 0,
+            x: 50,
+            y: floorY,
+            xDelta: 10,
             yDelta: 0,
             w: 250,
             h: 250
@@ -65,8 +65,8 @@ const gameData = {
         devil: {
             pic: devilImg,
             x: 450,
-            y: 000,
-            xDelta: 0,
+            y: floorY,
+            xDelta: 10,
             yDelta: 0,
             w: 250,
             h: 250
@@ -74,8 +74,8 @@ const gameData = {
         octopus: {
             pic: octopusImg,
             x: 700,
-            y: 000,
-            xDelta: 0,
+            y: floorY,
+            xDelta: 10,
             yDelta: 0,
             w: 250,
             h: 250
@@ -195,9 +195,8 @@ const draw = function(){
     context.fillText(APoint,65,21)
     context.fillStyle = 'red';    
     context.fillText('X',40,63);    
-    context.fillText(FPoint,65,63)
+    context.fillText(FPoint,65,63);
     if(Death){
-	//this part will be changed -Knarik
         context.font="100px Arial";
         context.fillStyle = 'red';    
         context.fillText("Death!",400,300);
@@ -231,8 +230,9 @@ const move = function(){
 }
 
 const update = function(){
+    //collision and movement
     hero.y += hero.yDelta;
-    //collision	
+
     forEach(monsters, function(monsters){
         if(hero.x+(hero.w/3)>=monsters.x && hero.x<=monsters.x && 
            hero.y+hero.h>=monsters.y){
@@ -244,6 +244,10 @@ const update = function(){
            }
         }
     })
+
+    forEach(monsters, function (monsters) {
+        monsters.x -= monsters.xDelta
+        })
 }
 
 const jump = function(){
@@ -251,13 +255,14 @@ const jump = function(){
     if(isJumping === true){
         imgNum = 4;
         if(isFalling === false){
-            hero.yDelta = -5;
-            if(hero.y === 200){
+            hero.yDelta = -10;
+
+            if(hero.y === 100){
                 isFalling = true;
             }
         } else {
-            hero.yDelta = 5;
-            if(hero.y === 400){
+            hero.yDelta = 10;
+            if(hero.y === floorY){
                 isJumping = false;
                 isFalling = false;
                 hero.yDelta = 0;
@@ -276,7 +281,36 @@ const loop = function(){
     requestAnimationFrame(loop);
 }
 
+const multimouthpos=[]
+const position = [1000];
+numbermonsters = {
+    level1: 2,
+    level2: 3,
+    level3: 4,
+    level4: 5
+}
+
+const monsterpos = function(){
+    const createPositions = function(num){
+        const helper = function(index){
+        if(index >= num){
+            return;
+        }
+        position[position.length]=position[position.length-1]+1000;
+        helper (index+1);
+        }
+        helper(1);
+    }
+    createPositions(20);
+    forEach(monsters, function(monsters){
+        monsters.x = position[rand(20)-1];
+
+    })
+
+}
+monsterpos();
 loop();
+
 
 document.addEventListener('keydown', function(event) {
 
