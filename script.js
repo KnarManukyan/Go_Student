@@ -120,8 +120,8 @@ const devil = gameData.monsters.devil;
 const exam = gameData.monsters.exam;
 const ninja = gameData.ninja;
 const monsters = [multimouth, octopus, devil/*, exam*/];
-let APoint = gameData.score.APoint;
-let FPoint = gameData.score.FPoint;
+const APoint = gameData.score.APoint;
+const FPoint = gameData.score.FPoint;
 const score = gameData.score;
 const background = gameData.background;
 const arrayA = [];
@@ -131,7 +131,8 @@ var isFalling = false;
 var imgNum = 0;
 var isMoving = false;
 var level = 1;
-let Death = false;
+var Death = false;
+
 const forEach = function(arr, func) {
     const helper = function(index) {
         if(index === arr.length){
@@ -166,6 +167,7 @@ const createPoints = function(level){
 createPoints(1);
 
 const drawPoints = function(){
+	
     const makePoints = function(arr,point,img){
 
         if(arr === point.length){
@@ -196,6 +198,7 @@ const draw = function(){
     context.fillStyle = 'red';    
     context.fillText('X',40,63);    
     context.fillText(FPoint,65,63);
+	
     if(Death){
         context.font="100px Arial";
         context.fillStyle = 'red';    
@@ -230,13 +233,12 @@ const move = function(){
 }
 
 const update = function(){
-    //collision and movement
+	
     hero.y += hero.yDelta;
 
     forEach(monsters, function(monsters){
-        if(hero.x+(hero.w/3)>=monsters.x && hero.x<=monsters.x && 
-           hero.y+hero.h>=monsters.y){
-           if(APoint===0){
+        if(hero.x + (hero.w/3) >= monsters.x && hero.x <= monsters.x && hero.y + hero.h >= monsters.y){
+           if(APoint === 0){
             Death = true;
            }
            else{
@@ -247,7 +249,7 @@ const update = function(){
 
     forEach(monsters, function (monsters) {
         monsters.x -= monsters.xDelta
-        })
+    })
 }
 
 const jump = function(){
@@ -255,13 +257,13 @@ const jump = function(){
     if(isJumping === true){
         imgNum = 4;
         if(isFalling === false){
-            hero.yDelta = -10;
+            hero.yDelta = -5;
 
             if(hero.y === 100){
                 isFalling = true;
             }
         } else {
-            hero.yDelta = 10;
+            hero.yDelta = 5;
             if(hero.y === floorY){
                 isJumping = false;
                 isFalling = false;
@@ -291,26 +293,30 @@ numbermonsters = {
 }
 
 const monsterpos = function(){
+	
     const createPositions = function(num){
+	    
         const helper = function(index){
+		
         if(index >= num){
             return;
         }
+		
         position[position.length]=position[position.length-1]+1000;
         helper (index+1);
         }
+	
         helper(1);
     }
+    
     createPositions(20);
     forEach(monsters, function(monsters){
         monsters.x = position[rand(20)-1];
 
     })
-
 }
 monsterpos();
 loop();
-
 
 document.addEventListener('keydown', function(event) {
 
