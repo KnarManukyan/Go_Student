@@ -109,8 +109,8 @@ const gameData = {
         score: 0,
         APoint: 0,
         FPoint: 0,
-        lvlCountA: [25,20,15,15],
-        lvlCountF: [5,7,9,11]
+        lvlCountA: [10,15,15,20],
+        lvlCountF: [3,4,4,6]
     }
 } 
 
@@ -189,13 +189,13 @@ const draw = function(){
     
     context.font = '20px Arial'
     context.drawImage(APointImg,0,0,30,30);
-    context.drawImage(FPointImg,0,40,30,30);
-    context.fillStyle = 'yellow';
+    
+    context.fillStyle = '#ffff00';
     context.fillText('X',40,21);
     context.fillText(score.APoint,65,21)
-    context.fillStyle = 'red';    
-    context.fillText('X',40,63);    
-    context.fillText(score.FPoint,65,63);
+       
+     
+    
 	
     if(Death){
         context.font="100px Arial";
@@ -220,9 +220,7 @@ const move = function(){
         } else {
            imgNum = 0;
         }
-    } else {
-        imgNum = 0;
-    }
+    } 
 
     if(isMoving === true){
         background.x -= 5;
@@ -266,8 +264,14 @@ const update = function(){
         if(arrayF[i].x <= hero.x + hero.w/3 && arrayF[i].x + 30 >= hero.x &&
            arrayF[i].y <= hero.y + hero.h && arrayF[i].y + 30 >= hero.h){
                arrayF[i].y = 1000;
-               score.FPoint++;
-           }
+           if(score.APoint >= 5) {
+               score.APoint = score.APoint - 5;
+           }  else {
+
+            alert("Game is over"); //if the A's are less than 5 then he has no life (
+            document.location.reload(); //reloads the page
+              }
+        }
     }
 }
 
