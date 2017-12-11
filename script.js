@@ -90,7 +90,7 @@ const gameData = {
             xDelta: ,
             yDelta: ,
             h: ,
-            w: ,			
+            w: ,            
         }*/
     },
     ninja: {
@@ -147,20 +147,20 @@ const forEach = function(arr, func) {
 
 const createPoints = function(level){
 
-	const pointsLoop = function(count, arr, pic, point, yVal){
+    const pointsLoop = function(count, arr, pic, point, yVal){
 
-		if(count<=0){
-			return;
-		}
+        if(count<=0){
+            return;
+        }
 
-		point[arr] = {
+        point[arr] = {
             img: pic,
             x: rand(19*background.w),
             y: rand(200)+yVal
         }
 
-		return pointsLoop(count-1,arr+1, pic, point, yVal);
-	}
+        return pointsLoop(count-1,arr+1, pic, point, yVal);
+    }
 
     pointsLoop(score.lvlCountA[level-1], 0, APointImg, arrayA, 300);
     pointsLoop(score.lvlCountF[level-1], 0, FPointImg, arrayF, 400);
@@ -198,9 +198,9 @@ const draw = function(){
        
      
     
-	
+    
     if(Death){
-       	alert("Game is over");
+        alert("Game is over");
         document.location.reload();
     }
 
@@ -240,7 +240,7 @@ const move = function(){
 }
 
 const update = function(){
-	
+    
     hero.y += hero.yDelta;
 
     for(i=0;i<=arrayA.length-1;i++){
@@ -264,7 +264,7 @@ const update = function(){
         }
     }
 
-   const collision = function(a){
+    const collision = function(a){
     forEach(monsters, function(monsters){
         if(hero.x+(hero.w/3)>=a && hero.x<=a && hero.y+hero.h>=monsters.y){
            if(score.APoint===0){
@@ -284,7 +284,7 @@ const update = function(){
         monsters.x1 -= monsters.xDelta;
         monsters.x2 -= monsters.xDelta;
         })    
-     /*const multix = [multimouth.x1,multimouth.x2];
+    /*const multix = [multimouth.x1,multimouth.x2];
     forEach(multix, function (multix) {
         if(multix - hero.x >= 350){
         if(multix===400){
