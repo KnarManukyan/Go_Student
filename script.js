@@ -200,9 +200,8 @@ const draw = function(){
     
 	
     if(Death){
-        context.font="100px Arial";
-        context.fillStyle = 'red';    
-        context.fillText("Death!",400,300);
+       	alert("Game is over");
+        document.location.reload();
     }
 
     forEach(monsters, function(monsters){
@@ -265,9 +264,9 @@ const update = function(){
         }
     }
 
-    const blabla = function(bla){
+   const collision = function(a){
     forEach(monsters, function(monsters){
-        if(hero.x+(hero.w/3)>=bla && hero.x<=bla && hero.y+hero.h>=monsters.y){
+        if(hero.x+(hero.w/3)>=a && hero.x<=a && hero.y+hero.h>=monsters.y){
            if(score.APoint===0){
             Death = true;
            }
@@ -278,14 +277,14 @@ const update = function(){
     })
     }
     forEach(monsters, function (monsters) {
-        blabla(monsters.x1);
-        blabla(monsters.x2);
+        collision(monsters.x1);
+        collision(monsters.x2);
         })
     forEach(monsters, function (monsters) {
         monsters.x1 -= monsters.xDelta;
         monsters.x2 -= monsters.xDelta;
         })    
-    const multix = [multimouth.x1,multimouth.x2];
+     /*const multix = [multimouth.x1,multimouth.x2];
     forEach(multix, function (multix) {
         if(multix - hero.x >= 350){
         if(multix===400){
@@ -297,7 +296,7 @@ const update = function(){
          }
         }
         }
-        })
+        })*/
     const devilx = [devil.x1,devil.x2];
     forEach(devilx, function (devilx) {
         if(devilx - hero.x <= 700){
