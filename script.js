@@ -24,6 +24,18 @@ heroImg7.src = "7.png";
 const heroImg8 = new Image();
 heroImg8.src = "8.png";
 
+const audio1 = new Audio('sound.mp3');
+const audio2 = new Audio('sound2.mp3');
+const audio3 = new Audio('sound3.mp3');
+const audio4 = new Audio('sound4.mp3');
+const audioMonster = new Audio('monster.mp3');
+
+audio1.addEventListener('ended', function() {
+    this.currentTime = 0;
+    this.play();
+}, false);
+audio1.play();
+
 const multimouthImg = new Image();
 multimouthImg.src = "multimouth.png";
 const devilImg = new Image();
@@ -43,9 +55,14 @@ APointImg.src = "A-Point.png";
 const FPointImg = new Image();
 FPointImg.src = "F-Point.png";
 
+const cloudImg = new Image();
+cloudImg.src = "cloud.png";
+
+
 const leftKey = 37;
 const upKey = 38;
 const rightKey = 39;
+const mKey = 77;
 const floorY=350;
 const floorYm = 400;
 const gameData = {
@@ -101,11 +118,12 @@ const gameData = {
     },
     ninja: {
         pic: [ninjaImg, ninjahookImg],
-        x: 20000,
+        x: 2000,
         y: floorYm - 65,
         xDelta: 3,
         yDelta: 5,
-        w: 100,
+
+        w: [100, 200],
         h: 250
     },
     background: {
@@ -119,7 +137,17 @@ const gameData = {
         FPoint: 0,
         lvlCountA: [10,15,15,20],
         lvlCountF: [3,4,4,6]
-    }
+    },
+
+    cloud: {
+        x: 2000,
+        y: floorYm - 265,
+        w: 300,
+        h: 100,
+        xDelta: 3,
+        pic: cloudImg
+    },
+    
 } 
 
 const hero = gameData.hero;
@@ -131,6 +159,7 @@ const ninja = gameData.ninja;
 const monsters = [multimouth, octopus, devil/*, exam*/];
 const score = gameData.score;
 const background = gameData.background;
+const cloud = gameData.cloud;
 const arrayA = [];
 const arrayF = [];
 var isJumping = false;
@@ -139,7 +168,7 @@ var imgNum = 0;
 var isMoving = false;
 var level = 1;
 var Death = false;
-var imgN = 0;
+
 
 const forEach = function(arr, func) {
     const helper = function(index) {
@@ -216,10 +245,27 @@ const draw = function(){
         context.drawImage(monsters.pic, monsters.x2, monsters.y, monsters.w, monsters.h);
     })
     context.drawImage(hero.pic[imgNum], hero.x-hero.w/3, hero.y, hero.w, hero.h);
-    context.drawImage(ninja.pic[imgN], ninja.x, ninja.y, ninja.w, ninja.h);
+    
     
     context.drawImage(exam.pic, exam.x, exam.y, exam.w, exam.h);
     move();
+
+    if(ninja.x - hero.x < 600) {
+        // console.log(ninja.x - hero.x);
+        context.drawImage(ninja.pic[1], ninja.x, ninja.y, ninja.w[1], ninja.h);
+        context.drawImage(cloud.pic, cloud.x, cloud.y, cloud.w, cloud.h);
+    } 
+     else if(hero.x+(hero.w/3)>=ninja.x && hero.x<=ninja.x && hero.y+hero.h>=ninja.y){
+               
+               context.drawImage(ninja.pic[0], -80000, ninja.y, ninja.w[0], ninja.h);
+
+            }
+    else {
+        // console.log(ninja.x - hero.x);
+        context.drawImage(ninja.pic[0], ninja.x, ninja.y, ninja.w[0], ninja.h);
+        
+    }
+    
 }
 
 const move = function(){
@@ -233,8 +279,7 @@ const move = function(){
         }
     } 
     
-       
-     
+ 
 
     if(isMoving === true){
         background.x -= 5;
@@ -248,6 +293,7 @@ const move = function(){
         monsters.x1 -= monsters.xDelta;
         monsters.x2 -= monsters.xDelta;
         ninja.x -= ninja.xDelta;
+        cloud.x -= cloud.xDelta;
         }) 
     }
     
@@ -282,21 +328,19 @@ const update = function(){
     }
 
     const collision = function(a){
-    forEach(monsters, function(monsters){
-        if(hero.x+(hero.w/3)>=a && hero.x<=a && hero.y+hero.h>=monsters.y){
-           
-            Death = true;
-        }
-    })
-    if(hero.x+(hero.w/3)>=ninja.x && hero.x<=ninja.x && hero.y+hero.h>=ninja.y){
-           
-            Death = true;
+        forEach(monsters, function(monsters){
+            if(hero.x+(hero.w/3)>=a && hero.x<=a && hero.y+hero.h>=monsters.y){
+               
+                Death = true;
+            }
+        })
+       
+        
     }
-}
     forEach(monsters, function (monsters) {
         collision(monsters.x1);
         collision(monsters.x2);
-        collision(ninja.x);
+        
         })
     /*forEach(monsters, function (monsters) {
         monsters.x1 -= monsters.xDelta;
@@ -367,7 +411,9 @@ const jump = function(){
 }
 
 const loop = function(){
-
+    if(Death) {
+        return;
+    }
     context.clearRect(0,0,1200,600);
     update();
     draw();
@@ -415,6 +461,10 @@ document.addEventListener('keydown', function(event) {
     if(event.keyCode === rightKey) {
         isMoving = true;
     }
+    if(event.keyCode === mKey) {
+        
+    }  
+    
     if (event.keyCode === upKey && isJumping === false) {
         isJumping = true;
     }
