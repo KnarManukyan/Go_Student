@@ -1,3 +1,4 @@
+const audioMonster = new Audio('monster.mp3');
 
 //if you want to change something tell that in chat then do that. or just upload a seperate file, then we will edit it and add to main one.
 const canvas = document.getElementById('canvas');
@@ -24,17 +25,7 @@ heroImg7.src = "7.png";
 const heroImg8 = new Image();
 heroImg8.src = "8.png";
 
-const audio1 = new Audio('sound.mp3');
-const audio2 = new Audio('sound2.mp3');
-const audio3 = new Audio('sound3.mp3');
-const audio4 = new Audio('sound4.mp3');
-const audioMonster = new Audio('monster.mp3');
 
-audio1.addEventListener('ended', function() {
-    this.currentTime = 0;
-    this.play();
-}, false);
-audio1.play();
 
 const multimouthImg = new Image();
 multimouthImg.src = "multimouth.png";
@@ -105,22 +96,23 @@ const gameData = {
             yDelta: 0,
             w: 250,
             h: 250
-        },
-        exam: {
-            pic: examImg,
-            x: canvas.w - 500,
-            y: 300,
-            xDelta: 0,
-            yDelta: 0,
-            w: 300,
-            h: 300,            
         }
+        
     },
+    exam: {
+            pic: examImg,
+            x: 32000,
+            y: 0,
+            xDelta: 2,
+            yDelta: 5,
+            w: 700,
+            h: 600,            
+        },
     ninja: {
         pic: [ninjaImg, ninjahookImg],
-        x: 2000,
+        x: 14000,
         y: floorYm - 65,
-        xDelta: 3,
+        xDelta: 2,
         yDelta: 5,
 
         w: [100, 200],
@@ -140,21 +132,21 @@ const gameData = {
     },
 
     cloud: {
-        x: 2000,
+        x: 14000,
         y: floorYm - 265,
         w: 300,
         h: 100,
-        xDelta: 3,
+        xDelta: 2,
         pic: cloudImg
-    },
+    }
     
-} 
+}; 
 
 const hero = gameData.hero;
 const multimouth = gameData.monsters.multimouth;
 const octopus = gameData.monsters.octopus;
 const devil = gameData.monsters.devil;
-const exam = gameData.monsters.exam;
+const exam = gameData.exam;
 const ninja = gameData.ninja;
 const monsters = [multimouth, octopus, devil/*, exam*/];
 const score = gameData.score;
@@ -177,9 +169,9 @@ const forEach = function(arr, func) {
         }
         func(arr[index]);   
         helper(index+1);    
-    }
+    };
     helper(0);
-}
+};
 
 const createPoints = function(level){
 
@@ -225,16 +217,13 @@ const draw = function(){
         context.drawImage(background.pic,background.x + i*background.w,0,background.w,canvas.height);
     }
     
-    context.font = '20px Arial'
+    context.font = '20px Arial';
     context.drawImage(APointImg,0,0,30,30);
     
     context.fillStyle = '#ffff00';
     context.fillText('X',40,21);
-    context.fillText(score.APoint,65,21)
-       
-     
-    
-    
+    context.fillText(score.APoint,65,21);
+   
     if(Death){
         alert("Game is over");
         document.location.reload();
@@ -251,22 +240,24 @@ const draw = function(){
     move();
 
     if(ninja.x - hero.x < 600) {
-        // console.log(ninja.x - hero.x);
         context.drawImage(ninja.pic[1], ninja.x, ninja.y, ninja.w[1], ninja.h);
         context.drawImage(cloud.pic, cloud.x, cloud.y, cloud.w, cloud.h);
-    } 
-     else if(hero.x+(hero.w/3)>=ninja.x && hero.x<=ninja.x && hero.y+hero.h>=ninja.y){
-               
-               context.drawImage(ninja.pic[0], -80000, ninja.y, ninja.w[0], ninja.h);
+        context.fillStyle = 'white';
+        context.fillText("With me so far?!",cloud.x + 50,cloud.y + 50);
+        if(hero.x+(hero.w/3)>=ninja.x && hero.x<=ninja.x + ninja.w[0] && hero.y+hero.h>=ninja.y){ 
+                ninja.x = -8000;
+                cloud.x = -8000;
+                score.APoint = score.APoint + 10;
+        }
 
-            }
+    } 
     else {
-        // console.log(ninja.x - hero.x);
+       
         context.drawImage(ninja.pic[0], ninja.x, ninja.y, ninja.w[0], ninja.h);
-        
+       
     }
-    
-}
+
+};
 
 const move = function(){
 
@@ -294,17 +285,16 @@ const move = function(){
         monsters.x2 -= monsters.xDelta;
         ninja.x -= ninja.xDelta;
         cloud.x -= cloud.xDelta;
+        exam.x -= exam.xDelta;
         }) 
     }
     
-}
+};
 
 
 const update = function(){
     
     hero.y += hero.yDelta;
-    
-
     for(i=0;i<=arrayA.length-1;i++){
         if(arrayA[i].x <= hero.x + hero.w/3 && arrayA[i].x + 30 >= hero.x &&
            arrayA[i].y <= hero.y + hero.h && arrayA[i].y + 30 >= hero.h){
@@ -325,12 +315,11 @@ const update = function(){
               }
         }
 
-    }
+    };
 
     const collision = function(a){
         forEach(monsters, function(monsters){
-            if(hero.x+(hero.w/3)>=a && hero.x<=a && hero.y+hero.h>=monsters.y){
-               
+            if(hero.x+(hero.w/3)>=a && hero.x<=a && hero.y+hero.h>=monsters.y+50){
                 Death = true;
             }
         })
@@ -342,52 +331,46 @@ const update = function(){
         collision(monsters.x2);
         
         })
-    /*forEach(monsters, function (monsters) {
-        monsters.x1 -= monsters.xDelta;
-        monsters.x2 -= monsters.xDelta;
-        })    
-    //const multix = [multimouth.x1,multimouth.x2];
-    /*forEach(multix, function (multix) {
-        if(multix - hero.x >= 350){
-        if(multix===400){
-            multimouth.xDelta = -multimouth.xDelta;
-        }
-        if(multix===800){
-            if(multimouth.xDelta<0){
-            multimouth.xDelta = -multimouth.xDelta;
-         }
-        }
-        }
-        })*/
+    if(hero.x+(hero.w/3) + 1000>=exam.x && hero.x<=exam.x && hero.y+hero.h>=exam.y+50){
+                const play = document.getElementById('track');
+
+                    const oldSrc = play.src;
+                    play.src = "";
+                    audioMonster.addEventListener('ended', function() {
+                    this.currentTime = 10;
+                    this.play();
+                    }, false);
+                    audioMonster.play();
+                }
+            
+   
     const devilx = [devil.x1,devil.x2];
     forEach(devilx, function (devilx) {
         if(devilx - hero.x <= 700){
             devil.xDelta = 10;
-        }if(devilx <= 0){
-        devil.xDelta = 10;
+        }else if(devilx <= 0){
+        devil.xDelta = 8;
     }
-    })
+    });
+
     const octopusx = [octopus.x1,octopus.x2];
     forEach(octopusx, function (octopusx) {
-        if(octopusx - hero.x <= 1000){
+        if(octopusx - hero.x <= 800){
             octopus.xDelta = 8;
         }if(octopusx <= 0){
-        octopus.xDelta = 7;
+        octopus.xDelta = 9;
     }
-    })
+    });
     const multimouthx = [multimouth.x1,multimouth.x2];
     forEach(multimouthx, function (multimouthx) {
         if(multimouthx - hero.x <= 800){
             multimouth.xDelta = 8;
-        }if(multimouthx <= 0){
+        } if(multimouthx <= 0){
         multimouth.xDelta = 8;
     }
-    })
-
+    });
 }
 
-            
-       
 
 const jump = function(){
 
@@ -399,7 +382,7 @@ const jump = function(){
             if(hero.y === 50){
                 isFalling = true;
             }
-        } else {
+        } else { 
             hero.yDelta = 7.5;
             if(hero.y === floorY){
                 isJumping = false;
