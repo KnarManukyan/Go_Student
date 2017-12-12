@@ -1,3 +1,4 @@
+
 //if you want to change something tell that in chat then do that. or just upload a seperate file, then we will edit it and add to main one.
 const canvas = document.getElementById('canvas');
 const context = canvas.getContext('2d');
@@ -90,7 +91,7 @@ const gameData = {
         },
         exam: {
             pic: examImg,
-            x: 100,
+            x: canvas.w - 500,
             y: 300,
             xDelta: 0,
             yDelta: 0,
@@ -100,9 +101,9 @@ const gameData = {
     },
     ninja: {
         pic: [ninjaImg, ninjahookImg],
-        x: 100,
+        x: 20000,
         y: floorYm - 65,
-        xDelta: 5,
+        xDelta: 3,
         yDelta: 5,
         w: 100,
         h: 250
@@ -224,6 +225,7 @@ const draw = function(){
 const move = function(){
 
     if(isMoving === true){
+         
         if(imgNum <= 6){
             imgNum ++;
         } else {
@@ -231,6 +233,8 @@ const move = function(){
         }
     } 
     
+       
+     
 
     if(isMoving === true){
         background.x -= 5;
@@ -243,6 +247,7 @@ const move = function(){
     forEach(monsters, function (monsters) {
         monsters.x1 -= monsters.xDelta;
         monsters.x2 -= monsters.xDelta;
+        ninja.x -= ninja.xDelta;
         }) 
     }
     
@@ -283,10 +288,15 @@ const update = function(){
             Death = true;
         }
     })
+    if(hero.x+(hero.w/3)>=ninja.x && hero.x<=ninja.x && hero.y+hero.h>=ninja.y){
+           
+            Death = true;
     }
+}
     forEach(monsters, function (monsters) {
         collision(monsters.x1);
         collision(monsters.x2);
+        collision(ninja.x);
         })
     /*forEach(monsters, function (monsters) {
         monsters.x1 -= monsters.xDelta;
@@ -329,7 +339,11 @@ const update = function(){
         multimouth.xDelta = 8;
     }
     })
+
 }
+
+            
+       
 
 const jump = function(){
 
