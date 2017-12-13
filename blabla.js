@@ -430,12 +430,14 @@ const monsterpos = function(){
         }
     }
     forEach(monsters, function(monsters){
-        monsters.x1 = position[rand(position.length)-1];
+        monsters.x1 = position[rand(position.length)];
         deletepos(monsters.x1);
-        monsters.x2 = position[rand(position.length)-1];
+        monsters.x2 = position[rand(position.length)];
+        while(monsters.x2===monsters.x1+2000 || monsters.x2===monsters.x1-2000){
+        monsters.x2 = position[rand(position.length)];
+        }
         deletepos(monsters.x2);
-    })
-
+    })     
 }
 monsterpos();
 loop();
