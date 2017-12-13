@@ -274,6 +274,9 @@ const move = function(){
  
 
     if(isMoving === true){
+        if(Death){
+            return;
+        }
         background.x -= 5;
         for(i=0;i<=arrayA.length-1;i++){
             arrayA[i].x -= 5;
