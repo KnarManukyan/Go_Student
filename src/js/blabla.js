@@ -1,4 +1,5 @@
-const audioMonster = new Audio('monster.mp3');
+const withAssetsPath = (src) => `./assets/${src}`;
+const audioMonster = new Audio(withAssetsPath('monster.mp3'));
 
 //if you want to change something tell that in chat then do that. or just upload a seperate file, then we will edit it and add to main one.
 const canvas = document.getElementById('canvas');
@@ -8,48 +9,36 @@ const rand = function(num) {
     return Math.floor(Math.random() * num);
 }
 
-const heroImg1 = new Image();
-heroImg1.src = "1.png";
-const heroImg2 = new Image();
-heroImg2.src = "2.png";
-const heroImg3 = new Image();
-heroImg3.src = "3.png";
-const heroImg4 = new Image();
-heroImg4.src = "4.png";
-const heroImg5 = new Image();
-heroImg5.src = "5.png";
-const heroImg6 = new Image();
-heroImg6.src = "6.png";
-const heroImg7 = new Image();
-heroImg7.src = "7.png";
-const heroImg8 = new Image();
-heroImg8.src = "8.png";
-
-
-
+const heroImgs = new Array(8).fill({}).map((_, i) => {
+	const heroImg = new Image();
+	heroImg.src = withAssetsPath(`${i + 1}.png`);
+	return heroImg;
+});
+const replay = new Image();
+replay.src = withAssetsPath("replay.png");
 const multimouthImg = new Image();
-multimouthImg.src = "multimouth.png";
+multimouthImg.src = withAssetsPath("multimouth.png");
 const devilImg = new Image();
-devilImg.src = "devil.png";
+devilImg.src = withAssetsPath("devil.png");
 const octopusImg = new Image();
-octopusImg.src = "octopus.png";
+octopusImg.src = withAssetsPath("octopus.png");
 const ninjaImg = new Image();
-ninjaImg.src = "ninja.png";
+ninjaImg.src = withAssetsPath("ninja.png");
 const ninjahookImg = new Image();
-ninjahookImg.src = "ninjahook.png";
+ninjahookImg.src = withAssetsPath("ninjahook.png");
 const examImg = new Image();
-examImg.src = "exam.png";
+examImg.src = withAssetsPath("exam.png");
 const background1 = new Image();
-background1.src = "cafeteria.jpg";
+background1.src = withAssetsPath("cafeteria.jpg");
 const APointImg = new Image();
-APointImg.src = "A-Point.png";
+APointImg.src = withAssetsPath("A-Point.png");
 const FPointImg = new Image();
-FPointImg.src = "F-Point.png";
+FPointImg.src = withAssetsPath("F-Point.png");
 
 const cloudImg = new Image();
-cloudImg.src = "cloud.png";
+cloudImg.src = withAssetsPath("cloud.png");
 
-
+const enter = 13;
 const leftKey = 37;
 const upKey = 38;
 const rightKey = 39;
@@ -58,7 +47,7 @@ const floorY=350;
 const floorYm = 400;
 const gameData = {
     hero: {
-        pic: [heroImg1,heroImg2,heroImg3,heroImg4,heroImg5,heroImg6,heroImg7,heroImg8],
+        pic: heroImgs,
         x: 0,
         y: floorY,
         xDelta: 0,
@@ -225,9 +214,11 @@ const draw = function(){
     context.fillText(score.APoint,65,21);
    
     if(Death){
-        alert("Game is over");
-        document.location.reload();
+        isFalling=true;
+        context.drawImage(replay,500,200,200,200);
     }
+
+    
 
     forEach(monsters, function(monsters){
         context.drawImage(monsters.pic, monsters.x1, monsters.y, monsters.w, monsters.h);
@@ -273,6 +264,9 @@ const move = function(){
  
 
     if(isMoving === true){
+        if(Death){
+            return;
+        }
         background.x -= 5;
         for(i=0;i<=arrayA.length-1;i++){
             arrayA[i].x -= 5;
@@ -309,9 +303,9 @@ const update = function(){
            if(score.APoint >= 5) {
                score.APoint = score.APoint - 5;
            }  else {
-
-            alert("Game is over"); //if the A's are less than 5 then he has no life (
-            document.location.reload(); //reloads the page
+            Death = true
+            //alert("Game is over"); //if the A's are less than 5 then he has no life (
+            //document.location.reload(); //reloads the page
               }
         }
 
@@ -319,12 +313,10 @@ const update = function(){
 
     const collision = function(a){
         forEach(monsters, function(monsters){
-            if(hero.x+(hero.w/3)>=a && hero.x<=a && hero.y+hero.h>=monsters.y+50){
-                Death = true;
+            if(hero.x+(hero.w/3)>=a+80 && hero.x<=a+monsters.w-80 && hero.y+hero.h>=monsters.y+80){
+                    Death = true;
             }
         })
-       
-        
     }
     forEach(monsters, function (monsters) {
         collision(monsters.x1);
@@ -395,8 +387,10 @@ const jump = function(){
 
 const loop = function(){
     if(Death) {
-        return;
-    }
+			setTimeout(function(){ 
+				return;
+			}, 1000);  
+    } 
     context.clearRect(0,0,1200,600);
     update();
     draw();
@@ -405,15 +399,15 @@ const loop = function(){
     requestAnimationFrame(loop);
 }
 
-const position = [2000]
+const position = [1500]
 const monsterpos = function(){
     const createPositions = function(num){
         const helper = function(index){
-        if(index >= num){
-            return;
-        }
-        position[position.length]=position[position.length-1]+2000;
-        helper (index+1);
+						if(index >= num){
+								return;
+						}
+						position[position.length]=position[position.length-1]+2000;
+						helper (index+1);
         }
         helper(1);
     }
@@ -426,12 +420,14 @@ const monsterpos = function(){
         }
     }
     forEach(monsters, function(monsters){
-        monsters.x1 = position[rand(position.length)-1];
+        monsters.x1 = position[rand(position.length)];
         deletepos(monsters.x1);
-        monsters.x2 = position[rand(position.length)-1];
+        monsters.x2 = position[rand(position.length)];
+        while(monsters.x2===monsters.x1+2000 || monsters.x2===monsters.x1-2000){
+        		monsters.x2 = position[rand(position.length)];
+        }
         deletepos(monsters.x2);
-    })
-
+    })     
 }
 monsterpos();
 loop();
@@ -451,10 +447,18 @@ document.addEventListener('keydown', function(event) {
     if (event.keyCode === upKey && isJumping === false) {
         isJumping = true;
     }
+
+    if (event.keyCode === enter && Death===true){
+        document.location.reload();        
+    }
 }, false);
 document.addEventListener('keyup', function(event){
-
     if(event.keyCode === rightKey){
         isMoving = false;
     }
 }, false)
+
+forEach(monsters, function(monsters){
+    console.log(monsters.x1);
+    console.log(monsters.x2);
+})

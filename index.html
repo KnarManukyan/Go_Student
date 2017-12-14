@@ -1,7 +1,7 @@
 <html>
 
 <head>
-	<link href="style.css" type="text/css" rel="stylesheet">
+	<link href="./src/style/style.css" type="text/css" rel="stylesheet">
     <title>Go student Go!</title>
 </head>
 
@@ -9,14 +9,13 @@
 
     <canvas id="canvas" width="1200" height="600" style="border:1px solid #000000;"></canvas>
     <audio id="track" autoplay="autoplay" loop="loop">
-        <source src="sound.mp3" type="audio/mpeg" /> 
-        <source src="sound.wav" type="audio/wav" />
-        <source src="sound.ogg" type="audio/ogg" />
+        <source src="./assets/sound.mp3" type="audio/mpeg" /> 
+        <source src="./assets/sound.wav" type="audio/wav" />
+        <source src="./assets/sound.ogg" type="audio/ogg" />
  
     </audio>
     
 	<div class='unmute' onclick="document.getElementById('track').muted = !document.getElementById('track').muted;$(this).toggleClass('mute')"></div>
-
-	<script src="script.js"> </script>
+	<script src="./src/js/blabla.js"> </script>
 </body>
 </html>
