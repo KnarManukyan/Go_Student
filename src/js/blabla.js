@@ -30,6 +30,12 @@ const examImg = new Image();
 examImg.src = withAssetsPath("exam.png");
 const background1 = new Image();
 background1.src = withAssetsPath("cafeteria.jpg");
+const background2 = new Image();
+background2.src = withAssetsPath("library.jpg");
+const background3 = new Image();
+background3.src = withAssetsPath("success.jpg");
+const background4 = new Image();
+background4.src = withAssetsPath("bridge.jpg");
 const APointImg = new Image();
 APointImg.src = withAssetsPath("A-Point.png");
 const FPointImg = new Image();
@@ -108,7 +114,10 @@ const gameData = {
         h: 250
     },
     background: {
-        pic: background1,
+				pic1: background1,
+				pic2: background2,
+				pic3: background3,
+				pic4: background4,
         x: 0,
         w: 1500
     },
@@ -143,12 +152,15 @@ const background = gameData.background;
 const cloud = gameData.cloud;
 const arrayA = [];
 const arrayF = [];
-var isJumping = false;
-var isFalling = false;
-var imgNum = 0;
-var isMoving = false;
-var level = 1;
-var Death = false;
+let isJumping = false;
+let isFalling = false;
+let imgNum = 0;
+let isMoving = false;
+let level = 1;
+let Death = false;
+let raf = null;
+let whichLevel = Math.floor(gameData.hero.x / gameData.background.w * 5);
+gameData.hero.x = gameData.background.w * 5 * whichLevel;
 
 
 const forEach = function(arr, func) {
@@ -168,11 +180,10 @@ const createPoints = function(level){
 
         if(count<=0){
             return;
-        }
-
+				}
         point[arr] = {
             img: pic,
-            x: rand(19*background.w),
+            x: rand(5*background.w),
             y: rand(200)+yVal
         }
 
@@ -182,7 +193,6 @@ const createPoints = function(level){
     pointsLoop(score.lvlCountA[level-1], 0, APointImg, arrayA, 300);
     pointsLoop(score.lvlCountF[level-1], 0, FPointImg, arrayF, 400);
 }
-createPoints(1);
 
 const drawPoints = function(){
     
@@ -201,11 +211,18 @@ const drawPoints = function(){
 }
 
 const draw = function(){
-
-    for(i=0; i<=19; i++){
-        context.drawImage(background.pic,background.x + i*background.w,0,background.w,canvas.height);
-    }
-    
+		for(i=0; i < 5; i++){
+        context.drawImage(background.pic1,background.x + i*background.w,0,background.w,canvas.height);
+		}
+		for(i=5; i < 10; i++){
+				context.drawImage(background.pic2,background.x + i*background.w,0,background.w,canvas.height);
+		}
+		for(i=10; i < 15; i++){
+				context.drawImage(background.pic3,background.x + i*background.w,0,background.w,canvas.height);
+		}
+		for(i=15; i < 20; i++){
+				context.drawImage(background.pic4,background.x + i*background.w,0,background.w,canvas.height);
+		}
     context.font = '20px Arial';
     context.drawImage(APointImg,0,0,30,30);
     
@@ -268,10 +285,10 @@ const move = function(){
             return;
         }
         background.x -= 5;
-        for(i=0;i<=arrayA.length-1;i++){
+        for(let i=0;i<=arrayA.length-1;i++){
             arrayA[i].x -= 5;
         }
-        for(i=0;i<=arrayF.length-1;i++){
+        for(let i=0;i<=arrayF.length-1;i++){
             arrayF[i].x -= 5;
         }
     forEach(monsters, function (monsters) {
@@ -289,14 +306,14 @@ const move = function(){
 const update = function(){
     
     hero.y += hero.yDelta;
-    for(i=0;i<=arrayA.length-1;i++){
+    for(let i=0;i<=arrayA.length-1;i++){
         if(arrayA[i].x <= hero.x + hero.w/3 && arrayA[i].x + 30 >= hero.x &&
            arrayA[i].y <= hero.y + hero.h && arrayA[i].y + 30 >= hero.h){
                arrayA[i].y = 1000;
                score.APoint++;
            }
     }
-    for(i=0;i<=arrayF.length-1;i++){
+    for(let i=0;i<=arrayF.length-1;i++){
         if(arrayF[i].x <= hero.x + hero.w/3 && arrayF[i].x + 30 >= hero.x &&
            arrayF[i].y <= hero.y + hero.h && arrayF[i].y + 30 >= hero.h){
                arrayF[i].y = 1000;
@@ -386,21 +403,16 @@ const jump = function(){
 }
 
 const loop = function(){
-    if(Death) {
-			setTimeout(function(){ 
-				return;
-			}, 1000);  
-    } 
     context.clearRect(0,0,1200,600);
     update();
     draw();
     jump();
     drawPoints();
-    requestAnimationFrame(loop);
+    raf = requestAnimationFrame(loop);
 }
 
-const position = [1500]
 const monsterpos = function(){
+	const position = [1500]
     const createPositions = function(num){
         const helper = function(index){
 						if(index >= num){
@@ -423,15 +435,21 @@ const monsterpos = function(){
         monsters.x1 = position[rand(position.length)];
         deletepos(monsters.x1);
         monsters.x2 = position[rand(position.length)];
-        while(monsters.x2===monsters.x1+2000 || monsters.x2===monsters.x1-2000){
+        while(Math.abs(monsters.x2 - monsters.x1) < 2000){
         		monsters.x2 = position[rand(position.length)];
         }
         deletepos(monsters.x2);
     })     
 }
-monsterpos();
-loop();
-
+const runAnimation = () => {
+	createPoints(1);
+	createPoints(2);
+	createPoints(3);
+	createPoints(4);
+	monsterpos();
+	loop();
+}
+runAnimation();
 document.addEventListener('keydown', function(event) {
 
     if(event.keyCode === leftKey) {
@@ -449,7 +467,15 @@ document.addEventListener('keydown', function(event) {
     }
 
     if (event.keyCode === enter && Death===true){
-        document.location.reload();        
+			isJumping = false;
+			isFalling = false;
+			imgNum = 0;
+			isMoving = false;
+			level = 1;
+			Death = false;
+			cancelAnimationFrame(raf);
+			raf = null;
+			runAnimation();        
     }
 }, false);
 document.addEventListener('keyup', function(event){
