@@ -103,10 +103,10 @@ const gameData = {
 
     exam: { //Anna
         pic: examImg,
-        x1: 5500,
-        x2: 11800,
-        x3: 17800,
-        x4: 32000,
+        x1: 7500,
+        x2: 16200,
+        x3: 25000,
+        x4: 30000,
         y: 0,
         xDelta: 2,
         yDelta: 5,
@@ -353,20 +353,16 @@ const update = function() {
         collision(monsters.x1);
         collision(monsters.x2);
     })
-
-    const examCollision = function(b) { //Anna
-
+     const examCollision = function(b) {
+        const play = document.getElementById('track');
         if (hero.x + (hero.w / 3) + 1000 >= b && hero.x <= b) {
-
-            const play = document.getElementById('track');
-
-            const oldSrc = play.src;
-            play.src = "";
-            audioMonster.addEventListener('ended', function() {
-                this.currentTime = 10;
-                this.play();
-            }, false);
+            play.pause();
             audioMonster.play();
+        }
+        if (!audioMonster.paused) {
+            play.pause()
+        } else {
+            play.play();
         }
     }
 
@@ -374,6 +370,7 @@ const update = function() {
     examCollision(gameData.exam.x2);
     examCollision(gameData.exam.x3);
     examCollision(gameData.exam.x4);
+
 
     const devilx = [devil.x1, devil.x2]; //Knarik
     forEach(devilx, function(devilx) {
