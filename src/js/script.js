@@ -13,6 +13,7 @@ const heroImgs = new Array(8).fill({}).map((_, i) => {
     heroImg.src = withAssetsPath(`${i + 1}.png`);
     return heroImg;
 });
+
 const replay = new Image();
 replay.src = withAssetsPath("replay.png");
 const multimouthImg = new Image();
@@ -50,7 +51,9 @@ const rightKey = 39;
 const mKey = 77;
 const floorY = 350;
 const floorYm = 400;
+
 const gameData = {
+
     hero: {
         pic: heroImgs,
         x: 0,
@@ -60,7 +63,9 @@ const gameData = {
         w: 350,
         h: 250
     },
+    
     monsters: {
+
         multimouth: {
             pic: multimouthImg,
             x1: 1000,
@@ -71,6 +76,7 @@ const gameData = {
             w: 200,
             h: 200
         },
+
         devil: {
             pic: devilImg,
             x1: 1500,
@@ -81,6 +87,7 @@ const gameData = {
             w: 220,
             h: 200
         },
+
         octopus: {
             pic: octopusImg,
             x1: 1600,
@@ -93,6 +100,7 @@ const gameData = {
         }
 
     },
+
     exam: {
         pic: examImg,
         x1: 5500,
@@ -105,6 +113,7 @@ const gameData = {
         w: 700,
         h: 600,
     },
+
     ninja: {
         pic: [ninjaImg, ninjahookImg],
         x: 14000,
@@ -115,6 +124,7 @@ const gameData = {
         w: [100, 200],
         h: 250
     },
+
     background: {
         pic1: background1,
         pic2: background2,
@@ -123,6 +133,7 @@ const gameData = {
         x: 0,
         w: 1500
     },
+
     score: {
         score: 0,
         APoint: 0,
@@ -213,6 +224,7 @@ const drawPoints = function() {
 }
 
 const draw = function() {
+
     for (i = 0; i < 5; i++) {
         context.drawImage(background.pic1, background.x + i * background.w, 0, background.w, canvas.height);
     }
@@ -225,6 +237,7 @@ const draw = function() {
     for (i = 15; i < 20; i++) {
         context.drawImage(background.pic4, background.x + i * background.w, 0, background.w, canvas.height);
     }
+
     context.font = '20px Arial';
     context.drawImage(APointImg, 0, 0, 30, 30);
 
@@ -237,20 +250,16 @@ const draw = function() {
         context.drawImage(replay, 500, 200, 200, 200);
     }
 
-
-
     forEach(monsters, function(monsters) {
         context.drawImage(monsters.pic, monsters.x1, monsters.y, monsters.w, monsters.h);
         context.drawImage(monsters.pic, monsters.x2, monsters.y, monsters.w, monsters.h);
     })
+
     context.drawImage(hero.pic[imgNum], hero.x - hero.w / 3, hero.y, hero.w, hero.h);
-
-
     context.drawImage(exam.pic, exam.x1, exam.y, exam.w, exam.h);
     context.drawImage(exam.pic, exam.x2, exam.y, exam.w, exam.h);
     context.drawImage(exam.pic, exam.x3, exam.y, exam.w, exam.h);
     context.drawImage(exam.pic, exam.x4, exam.y, exam.w, exam.h);
-
     move();
 
     if (ninja.x - hero.x < 600) {
@@ -258,18 +267,15 @@ const draw = function() {
         context.drawImage(cloud.pic, cloud.x, cloud.y, cloud.w, cloud.h);
         context.fillStyle = 'white';
         context.fillText("With me so far?!", cloud.x + 50, cloud.y + 50);
+
         if (hero.x + (hero.w / 3) >= ninja.x && hero.x <= ninja.x + ninja.w[0] && hero.y + hero.h >= ninja.y) {
             ninja.x = -8000;
             cloud.x = -8000;
             score.APoint = score.APoint + 10;
         }
-
     } else {
-
         context.drawImage(ninja.pic[0], ninja.x, ninja.y, ninja.w[0], ninja.h);
-
     }
-
 };
 
 const move = function() {
@@ -283,19 +289,21 @@ const move = function() {
         }
     }
 
-
-
     if (isMoving === true) {
+
         if (Death) {
             return;
         }
+
         background.x -= 5;
+
         for (let i = 0; i <= arrayA.length - 1; i++) {
             arrayA[i].x -= 5;
         }
         for (let i = 0; i <= arrayF.length - 1; i++) {
             arrayF[i].x -= 5;
         }
+
         forEach(monsters, function(monsters) {
             monsters.x1 -= monsters.xDelta;
             monsters.x2 -= monsters.xDelta;
@@ -307,13 +315,12 @@ const move = function() {
             exam.x4 -= exam.xDelta;
         })
     }
-
 };
-
 
 const update = function() {
 
     hero.y += hero.yDelta;
+
     for (let i = 0; i <= arrayA.length - 1; i++) {
         if (arrayA[i].x <= hero.x + hero.w / 3 && arrayA[i].x + 30 >= hero.x &&
             arrayA[i].y <= hero.y + hero.h && arrayA[i].y + 30 >= hero.h) {
@@ -321,6 +328,7 @@ const update = function() {
             score.APoint++;
         }
     }
+
     for (let i = 0; i <= arrayF.length - 1; i++) {
         if (arrayF[i].x <= hero.x + hero.w / 3 && arrayF[i].x + 30 >= hero.x &&
             arrayF[i].y <= hero.y + hero.h && arrayF[i].y + 30 >= hero.h) {
@@ -328,12 +336,9 @@ const update = function() {
             if (score.APoint >= 5) {
                 score.APoint = score.APoint - 5;
             } else {
-                Death = true
-                //alert("Game is over"); //if the A's are less than 5 then he has no life (
-                //document.location.reload(); //reloads the page
+                Death = true;
             }
         }
-
     };
 
     const collision = function(a) {
@@ -349,30 +354,27 @@ const update = function() {
         collision(monsters.x2);
 
     })
-    const examcollision = function(b) {
-        forEach(exam, function(exam) {
-            if (hero.x + (hero.w / 3) + 1000 >= b && hero.x <= b && hero.y + hero.h >= exam.y + 50) {
 
-                const play = document.getElementById('track');
+    const examCollision = function(b) {
 
-                const oldSrc = play.src;
-                play.src = "";
-                audioMonster.addEventListener('ended', function() {
-                    this.currentTime = 10;
-                    this.play();
-                }, false);
-                audioMonster.play();
-            }
-        })
+        if (hero.x + (hero.w / 3) + 1000 >= b && hero.x <= b) {
+
+            const play = document.getElementById('track');
+
+            const oldSrc = play.src;
+            play.src = "";
+            audioMonster.addEventListener('ended', function() {
+                this.currentTime = 10;
+                this.play();
+            }, false);
+            audioMonster.play();
+        }
     }
-    forEach(exam, function(exam) {
-        examcollision(exam.x1);
-        examcollision(exam.x2);
-        examcollision(exam.x3);
-        examcollision(exam.x4);
-    })
 
-
+    examCollision(gameData.exam.x1);
+    examCollision(gameData.exam.x2);
+    examCollision(gameData.exam.x3);
+    examCollision(gameData.exam.x4);
 
     const devilx = [devil.x1, devil.x2];
     forEach(devilx, function(devilx) {
@@ -392,6 +394,7 @@ const update = function() {
             octopus.xDelta = 9;
         }
     });
+
     const multimouthx = [multimouth.x1, multimouth.x2];
     forEach(multimouthx, function(multimouthx) {
         if (multimouthx - hero.x <= 800) {
@@ -435,6 +438,7 @@ const loop = function() {
 }
 
 const monsterpos = function() {
+
     const position = [1500]
     const createPositions = function(num) {
         const helper = function(index) {
@@ -447,6 +451,7 @@ const monsterpos = function() {
         helper(1);
     }
     createPositions(6);
+
     const deletepos = function(x) {
         for (let i = 0; i < position.length; i++) {
             if (x === position[i]) {
@@ -464,6 +469,7 @@ const monsterpos = function() {
         deletepos(monsters.x2);
     })
 }
+
 const runAnimation = () => {
     createPoints(1);
     createPoints(2);
@@ -473,16 +479,11 @@ const runAnimation = () => {
     loop();
 }
 runAnimation();
+
 document.addEventListener('keydown', function(event) {
 
-    if (event.keyCode === leftKey) {
-
-    }
     if (event.keyCode === rightKey) {
         isMoving = true;
-    }
-    if (event.keyCode === mKey) {
-
     }
 
     if (event.keyCode === upKey && isJumping === false) {
@@ -490,6 +491,7 @@ document.addEventListener('keydown', function(event) {
     }
 
     if (event.keyCode === enter && Death === true) {
+        document.location.reload();
         isJumping = false;
         isFalling = false;
         imgNum = 0;
@@ -501,6 +503,7 @@ document.addEventListener('keydown', function(event) {
         runAnimation();
     }
 }, false);
+
 document.addEventListener('keyup', function(event) {
     if (event.keyCode === rightKey) {
         isMoving = false;
@@ -514,7 +517,6 @@ canvas.addEventListener('click', function(e) {
         }
     }
 })
-
 
 forEach(monsters, function(monsters) {
     console.log(monsters.x1);
