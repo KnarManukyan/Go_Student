@@ -448,7 +448,8 @@ const loop = function() { //EVERYONE WILL SAY THIS
     update();
     draw();
     jump(); 
-    drawPoints(); 
+    drawPoints();
+    requestAnimationFrame(loop);
 }
 
 const monsterPos = function() { //Knarik
