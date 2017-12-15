@@ -1,4 +1,4 @@
-const withAssetsPath = (src) => `./assets/${src}`;
+const withAssetsPath = (src) => `./assets/${src}`; //Iren
 const audioMonster = new Audio(withAssetsPath('monster.mp3'));
 
 const canvas = document.getElementById('canvas');
@@ -54,7 +54,7 @@ const floorYm = 400;
 
 const gameData = {
 
-    hero: {
+    hero: { //Tiko
         pic: heroImgs,
         x: 0,
         y: floorY,
@@ -64,7 +64,7 @@ const gameData = {
         h: 250
     },
     
-    monsters: {
+    monsters: { //Knarik
 
         multimouth: {
             pic: multimouthImg,
@@ -101,7 +101,7 @@ const gameData = {
 
     },
 
-    exam: {
+    exam: { //Anna
         pic: examImg,
         x1: 5500,
         x2: 11800,
@@ -114,7 +114,7 @@ const gameData = {
         h: 600,
     },
 
-    ninja: {
+    ninja: { //Anna
         pic: [ninjaImg, ninjahookImg],
         x: 14000,
         y: floorYm - 65,
@@ -125,7 +125,7 @@ const gameData = {
         h: 250
     },
 
-    background: {
+    background: { //Tiko
         pic1: background1,
         pic2: background2,
         pic3: background3,
@@ -134,15 +134,15 @@ const gameData = {
         w: 1500
     },
 
-    score: {
+    score: { //Tiko
         score: 0,
         APoint: 0,
         FPoint: 0,
-        lvlCountA: [10, 150, 15, 20],
-        lvlCountF: [3, 4, 4, 6]
+        lvlCountA: [10, 9, 8, 7],
+        lvlCountF: [4, 6, 8, 10]
     },
 
-    cloud: {
+    cloud: { //Anna
         x: 14000,
         y: floorYm - 265,
         w: 300,
@@ -153,17 +153,17 @@ const gameData = {
 
 };
 
-const hero = gameData.hero;
-const multimouth = gameData.monsters.multimouth;
+const hero = gameData.hero; //Tiko
+const multimouth = gameData.monsters.multimouth; //Knarik
 const octopus = gameData.monsters.octopus;
 const devil = gameData.monsters.devil;
-const exam = gameData.exam;
+const exam = gameData.exam; //Anna
 const ninja = gameData.ninja;
-const monsters = [multimouth, octopus, devil /*, exam*/ ];
-const score = gameData.score;
+const monsters = [multimouth, octopus, devil]; //Knarik
+const score = gameData.score; //Tiko
 const background = gameData.background;
-const cloud = gameData.cloud;
-const arrayA = [];
+const cloud = gameData.cloud; //Anna
+const arrayA = []; //Tiko
 const arrayF = [];
 let isJumping = false;
 let isFalling = false;
@@ -171,7 +171,6 @@ let imgNum = 0;
 let isMoving = false;
 let level = 1;
 let Death = false;
-let raf = null;
 let whichLevel = Math.floor(gameData.hero.x / gameData.background.w * 5);
 gameData.hero.x = gameData.background.w * 5 * whichLevel;
 
@@ -187,7 +186,7 @@ const forEach = function(arr, func) {
     helper(0);
 };
 
-const createPoints = function(level) {
+const createPoints = function(level,extra) { //Tiko
 
     const pointsLoop = function(count, arr, pic, point, yVal) {
 
@@ -196,9 +195,10 @@ const createPoints = function(level) {
         }
         point[arr] = {
             img: pic,
-            x: level*rand(5 * background.w),
+            x: rand(5*background.w-1000) + extra,
             y: rand(200) + yVal
         }
+        console.log(point[arr].x)
 
         return pointsLoop(count - 1, arr + 1, pic, point, yVal);
     }
@@ -207,7 +207,7 @@ const createPoints = function(level) {
     pointsLoop(score.lvlCountF[level - 1], 0, FPointImg, arrayF, 400);
 }
 
-const drawPoints = function() {
+const drawPoints = function() { //Tiko
 
     const makePoints = function(arr, point, img) {
 
@@ -225,7 +225,7 @@ const drawPoints = function() {
 
 const draw = function() {
 
-    for (i = 0; i < 5; i++) {
+    for (i = 0; i < 5; i++) { //Tiko
         context.drawImage(background.pic1, background.x + i * background.w, 0, background.w, canvas.height);
     }
     for (i = 5; i < 10; i++) {
@@ -238,31 +238,31 @@ const draw = function() {
         context.drawImage(background.pic4, background.x + i * background.w, 0, background.w, canvas.height);
     }
 
-    context.font = '20px Arial';
+    context.font = '20px Arial'; //Tiko
     context.drawImage(APointImg, 0, 0, 30, 30);
 
     context.fillStyle = '#ffff00';
     context.fillText('X', 40, 21);
     context.fillText(score.APoint, 65, 21);
 
-    if (Death) {
+    if(Death) { //Knarik
         isFalling = true;
         context.drawImage(replay, 500, 200, 200, 200);
     }
 
-    forEach(monsters, function(monsters) {
+    forEach(monsters, function(monsters) { //Knarik
         context.drawImage(monsters.pic, monsters.x1, monsters.y, monsters.w, monsters.h);
         context.drawImage(monsters.pic, monsters.x2, monsters.y, monsters.w, monsters.h);
     })
 
-    context.drawImage(hero.pic[imgNum], hero.x - hero.w / 3, hero.y, hero.w, hero.h);
-    context.drawImage(exam.pic, exam.x1, exam.y, exam.w, exam.h);
+    context.drawImage(hero.pic[imgNum], hero.x - hero.w / 3, hero.y, hero.w, hero.h); //Tiko
+    context.drawImage(exam.pic, exam.x1, exam.y, exam.w, exam.h); //Anna
     context.drawImage(exam.pic, exam.x2, exam.y, exam.w, exam.h);
     context.drawImage(exam.pic, exam.x3, exam.y, exam.w, exam.h);
     context.drawImage(exam.pic, exam.x4, exam.y, exam.w, exam.h);
     move();
 
-    if (ninja.x - hero.x < 600) {
+    if (ninja.x - hero.x < 600) { //Anna
         context.drawImage(ninja.pic[1], ninja.x, ninja.y, ninja.w[1], ninja.h);
         context.drawImage(cloud.pic, cloud.x, cloud.y, cloud.w, cloud.h);
         context.fillStyle = 'white';
@@ -280,9 +280,9 @@ const draw = function() {
 
 const move = function() {
 
-    if (isMoving === true) {
+    if (isMoving === true && !Death) { //Iren
 
-        if (imgNum <= 6) {
+        if (imgNum <= 6) { //Iren
             imgNum++;
         } else {
             imgNum = 0;
@@ -291,20 +291,20 @@ const move = function() {
 
     if (isMoving === true) {
 
-        if (Death) {
+        if (Death) { //Tiko
             return;
         }
 
-        background.x -= 5;
+        background.x -= 5; //Tiko
 
-        for (let i = 0; i <= arrayA.length - 1; i++) {
+        for (let i = 0; i <= arrayA.length - 1; i++) { //Tiko
             arrayA[i].x -= 5;
         }
         for (let i = 0; i <= arrayF.length - 1; i++) {
             arrayF[i].x -= 5;
         }
 
-        forEach(monsters, function(monsters) {
+        forEach(monsters, function(monsters) { //Knarik,Anna
             monsters.x1 -= monsters.xDelta;
             monsters.x2 -= monsters.xDelta;
             ninja.x -= ninja.xDelta;
@@ -319,7 +319,7 @@ const move = function() {
 
 const update = function() {
 
-    hero.y += hero.yDelta;
+    hero.y += hero.yDelta; //Tiko
 
     for (let i = 0; i <= arrayA.length - 1; i++) {
         if (arrayA[i].x <= hero.x + hero.w / 3 && arrayA[i].x + 30 >= hero.x &&
@@ -341,7 +341,7 @@ const update = function() {
         }
     };
 
-    const collision = function(a) {
+    const collision = function(a) { //Knarik
         forEach(monsters, function(monsters) {
             if (hero.x + (hero.w / 3) >= a + 80 && hero.x <= a + monsters.w - 80 && hero.y + hero.h >= monsters.y + 80) {
                 Death = true;
@@ -349,13 +349,12 @@ const update = function() {
         })
     }
 
-    forEach(monsters, function(monsters) {
+    forEach(monsters, function(monsters) { //Knarik
         collision(monsters.x1);
         collision(monsters.x2);
-
     })
 
-    const examCollision = function(b) {
+    const examCollision = function(b) { //Anna
 
         if (hero.x + (hero.w / 3) + 1000 >= b && hero.x <= b) {
 
@@ -376,18 +375,18 @@ const update = function() {
     examCollision(gameData.exam.x3);
     examCollision(gameData.exam.x4);
 
-    const devilx = [devil.x1, devil.x2];
+    const devilx = [devil.x1, devil.x2]; //Knarik
     forEach(devilx, function(devilx) {
-        if (devilx - hero.x <= 700) {
+        if (devilx - hero.x <= 1000) {
             devil.xDelta = 10;
         } else if (devilx <= 0) {
             devil.xDelta = 8;
         }
     });
 
-    const octopusx = [octopus.x1, octopus.x2];
+    const octopusx = [octopus.x1, octopus.x2]; //Knarik
     forEach(octopusx, function(octopusx) {
-        if (octopusx - hero.x <= 800) {
+        if (octopusx - hero.x <= 1000) {
             octopus.xDelta = 8;
         }
         if (octopusx <= 0) {
@@ -395,9 +394,9 @@ const update = function() {
         }
     });
 
-    const multimouthx = [multimouth.x1, multimouth.x2];
+    const multimouthx = [multimouth.x1, multimouth.x2]; //Knarik
     forEach(multimouthx, function(multimouthx) {
-        if (multimouthx - hero.x <= 800) {
+        if (multimouthx - hero.x <= 1000) {
             multimouth.xDelta = 8;
         }
         if (multimouthx <= 0) {
@@ -405,20 +404,24 @@ const update = function() {
         }
     });
 
-    console.log(level)
-
-    if(background.x <= -7500 && level === 1){
+    if(background.x <= -6500 && level === 1){ //Tiko
         level++;
+        createPoints(level,1000);
+        monsterPos();
     }
-    if(background.x <= -15000 && level === 2){
+    if(background.x <= -14000 && level === 2){
         level++;
+        createPoints(level,1000);
+        monsterPos();
     }
-    if(background.x <= -22500 && level === 3){
+    if(background.x <= -21500 && level === 3){
         level++;
+        createPoints(level,1000);
+        monsterPos();
     }
 }
 
-const jump = function() {
+const jump = function() { //Tiko
 
     if (isJumping === true) {
         imgNum = 4;
@@ -440,16 +443,15 @@ const jump = function() {
     }
 }
 
-const loop = function() {
+const loop = function() { //EVERYONE WILL SAY THIS
     context.clearRect(0, 0, 1200, 600);
     update();
     draw();
-    jump();
-    drawPoints();
-    raf = requestAnimationFrame(loop);
+    jump(); 
+    drawPoints(); 
 }
 
-const monsterpos = function() {
+const monsterPos = function() { //Knarik
 
     const position = [1500]
     const createPositions = function(num) {
@@ -464,32 +466,33 @@ const monsterpos = function() {
     }
     createPositions(6);
 
-    const deletepos = function(x) {
+    const deletePos = function(x) {
         for (let i = 0; i < position.length; i++) {
             if (x === position[i]) {
                 position.splice(i, 1);
             }
         }
     }
+    
     forEach(monsters, function(monsters) {
         monsters.x1 = position[rand(position.length)];
-        deletepos(monsters.x1);
+        deletePos(monsters.x1);
         monsters.x2 = position[rand(position.length)];
         while (Math.abs(monsters.x2 - monsters.x1) < 2000) {
             monsters.x2 = position[rand(position.length)];
         }
-        deletepos(monsters.x2);
+        deletePos(monsters.x2);
     })
 }
 
-const runAnimation = () => {
-    createPoints(level);
-    monsterpos();
+const runAnimation = () => { //Anna
+    createPoints(level,0);
+    monsterPos();
     loop();
 }
 runAnimation();
 
-document.addEventListener('keydown', function(event) {
+document.addEventListener('keydown', function(event) { //Iren
 
     if (event.keyCode === rightKey) {
         isMoving = true;
@@ -507,28 +510,21 @@ document.addEventListener('keydown', function(event) {
         isMoving = false;
         level = 1;
         Death = false;
-        cancelAnimationFrame(raf);
-        raf = null;
         runAnimation();
     }
 }, false);
 
-document.addEventListener('keyup', function(event) {
+document.addEventListener('keyup', function(event) { //Iren
     if (event.keyCode === rightKey) {
         isMoving = false;
         imgNum = 0;
     }
 }, false)
 
-canvas.addEventListener('click', function(e) {
+canvas.addEventListener('click', function(e) { //Iren
     if (Death) {
         if (Math.sqrt((e.offsetX - 500) ** 2 + (e.offsetY - 300) ** 2) < 100) {
             document.location.reload();
         }
     }
-})
-
-forEach(monsters, function(monsters) {
-    console.log(monsters.x1);
-    console.log(monsters.x2);
 })
