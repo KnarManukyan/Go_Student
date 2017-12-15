@@ -138,7 +138,7 @@ const gameData = {
         score: 0,
         APoint: 0,
         FPoint: 0,
-        lvlCountA: [10, 15, 15, 20],
+        lvlCountA: [10, 150, 15, 20],
         lvlCountF: [3, 4, 4, 6]
     },
 
@@ -196,7 +196,7 @@ const createPoints = function(level) {
         }
         point[arr] = {
             img: pic,
-            x: rand(5 * background.w),
+            x: level*rand(5 * background.w),
             y: rand(200) + yVal
         }
 
@@ -404,8 +404,19 @@ const update = function() {
             multimouth.xDelta = 8;
         }
     });
-}
 
+    console.log(level)
+
+    if(background.x <= -7500 && level === 1){
+        level++;
+    }
+    if(background.x <= -15000 && level === 2){
+        level++;
+    }
+    if(background.x <= -22500 && level === 3){
+        level++;
+    }
+}
 
 const jump = function() {
 
@@ -423,6 +434,7 @@ const jump = function() {
                 isJumping = false;
                 isFalling = false;
                 hero.yDelta = 0;
+                imgNum = 0;
             }
         }
     }
@@ -471,10 +483,7 @@ const monsterpos = function() {
 }
 
 const runAnimation = () => {
-    createPoints(1);
-    createPoints(2);
-    createPoints(3);
-    createPoints(4);
+    createPoints(level);
     monsterpos();
     loop();
 }
@@ -507,6 +516,7 @@ document.addEventListener('keydown', function(event) {
 document.addEventListener('keyup', function(event) {
     if (event.keyCode === rightKey) {
         isMoving = false;
+        imgNum = 0;
     }
 }, false)
 
