@@ -303,16 +303,6 @@ const draw = function() {
         context.drawImage(background.pic4, background.x + i * background.w, 0, background.w, canvas.height);
     }
 
-    context.font = '60px Arial'
-    context.fillStyle = 'black'
-    context.fillText('Press Right Arrow To Move Right',background.x+150,150);
-    context.fillText('Press Up Arrow To Jump',background.x+260,200);
-    context.fillText('Collect A-s To Score Points',background.x+230,250);
-    context.fillText('Avoid F-s! If You Have 5 Or More A-s,',background.x+100,300);
-    context.fillText('You Will Lose 5 A-s', background.x+350,350)
-    context.fillText('If Not, F Will Kill You',background.x+340,400);
-    context.fillText('Avoid Monsters, They Will Kill You',background.x+150,450);
-
     context.font = '20px Arial';
     context.drawImage(APointImg, 0, 0, 30, 30);
 
@@ -723,7 +713,6 @@ document.addEventListener('keyup', function(event) {
         }
     }
 }, false)
-
 canvas.addEventListener('click', function(e) { 
     if (Death) {
         if (Math.sqrt((e.offsetX - 500) ** 2 + (e.offsetY - 300) ** 2) < 100) {
