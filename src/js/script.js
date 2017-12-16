@@ -304,7 +304,7 @@ const draw = function() {
     }
 
     context.font = '60px Arial'
-    context.fillStyle = 'blue'
+    context.fillStyle = 'black'
     context.fillText('Press Right Arrow To Move Right',background.x+150,150);
     context.fillText('Press Up Arrow To Jump',background.x+260,200);
     context.fillText('Collect A-s To Score Points',background.x+230,250);
