@@ -199,7 +199,7 @@ const gameData = {
     },
 
     score: { //Tiko
-        APoint: 1000,
+        APoint: 5,
         FPoint: 0,
         lvlCountA: [10, 9, 8, 7],
         lvlCountF: [4, 6, 8, 10]
@@ -460,11 +460,11 @@ const update = function() {
     };
 
     const collision = function(a) { //Knarik
-        // forEach(monsters, function(monsters) {
-        //     if (hero.x + (hero.w / 3) >= a + 80 && hero.x <= a + monsters.w - 80 && hero.y + hero.h >= monsters.y + 80) {
-        //         Death = true;
-        //     }
-        // })
+         forEach(monsters, function(monsters) {
+           if (hero.x + (hero.w / 3) >= a + 80 && hero.x <= a + monsters.w - 80 && hero.y + hero.h >= monsters.y + 80) {
+               Death = true;
+           }
+         })
     }
 
     forEach(monsters, function(monsters) { //Knarik
