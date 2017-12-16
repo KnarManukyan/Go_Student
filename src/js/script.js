@@ -527,37 +527,34 @@ const update = function() {
     examCollision(gameData.exam.x3);
     examCollision(gameData.exam.x4);
 
-   forEach(monsters,function(monsters){
-    const devilx = [devil.x1, devil.x2]; 
+    const devilx = [devil.x1, devil.x2];
     forEach(devilx, function(devilx) {
         if (devilx - hero.x <= 1000) {
-            monsters.xDelta = 8;
-        } 
-        if (devilx <= -300) {
-            monsters.xDelta = 5;
+            devil.xDelta = 10;
+        } else if (devilx <= 0) {
+            devil.xDelta = 8;
         }
     });
 
-    const octopusx = [octopus.x1, octopus.x2]; 
+    const octopusx = [octopus.x1, octopus.x2];
     forEach(octopusx, function(octopusx) {
         if (octopusx - hero.x <= 1000) {
-            monsters.xDelta = 8;
+            octopus.xDelta = 8;
         }
-        if (octopusx <= -300) {
-            monsters.xDelta = 5;
+        if (octopusx <= 0) {
+            octopus.xDelta = 9;
         }
     });
 
-    const multimouthx = [multimouth.x1, multimouth.x2]; 
+    const multimouthx = [multimouth.x1, multimouth.x2];
     forEach(multimouthx, function(multimouthx) {
         if (multimouthx - hero.x <= 1000) {
-            monsters.xDelta = 8;
+            multimouth.xDelta = 8;
         }
-        if (multimouthx <= -300) {
-            monsters.xDelta = 5;
+        if (multimouthx <= 0) {
+            multimouth.xDelta = 8;
         }
     });
-});
 
     if(background.x <= -6500 && level === 1){
         level++;
@@ -635,7 +632,7 @@ const loop = function() { //EVERYONE WILL SAY THIS
     requestAnimationFrame(loop);
 }
 
-const monsterPos = function() { 
+const monsterPos = function() {
 
     const position = [1500]
     const createPositions = function(num) {
@@ -643,7 +640,7 @@ const monsterPos = function() {
             if (index >= num) {
                 return;
             }
-            position[position.length] = position[position.length - 1] + 1500;
+            position[position.length] = position[position.length - 1] + 1000;
             helper(index + 1);
         }
         helper(1);
@@ -662,7 +659,7 @@ const monsterPos = function() {
         monsters.x1 = position[rand(position.length)];
         deletePos(monsters.x1);
         monsters.x2 = position[rand(position.length)];
-        while (Math.abs(monsters.x2 - monsters.x1) === 1500) {
+        while (Math.abs(monsters.x2 - monsters.x1) < 1000) {
             monsters.x2 = position[rand(position.length)];
         }
         deletePos(monsters.x2);
