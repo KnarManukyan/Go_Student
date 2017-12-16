@@ -199,7 +199,7 @@ const gameData = {
     },
 
     score: {
-        APoint: 5,
+        APoint: 25,
         FPoint: 0,
         lvlCountA: [10, 9, 8, 7],
         lvlCountF: [4, 6, 8, 10]
