@@ -1,4 +1,4 @@
-const withAssetsPath = (src) => `./assets/${src}`; //Iren
+const withAssetsPath = (src) => `./assets/${src}`; 
 const audioMonster = new Audio(withAssetsPath('monster.mp3'));
 const audioLaugh = new Audio(withAssetsPath('laugh.mp3'));
 
@@ -115,7 +115,7 @@ const floorYm = 400;
 
 const gameData = {
 
-    hero: { //Tiko
+    hero: {
         pic: [heroImg1,heroImg2,heroImg3,heroImg4,heroImg5,heroImg6,heroImg7,heroImg8,
               heroImg9,heroImg10,heroImg11,heroImg12,heroImg13,heroImg14,heroImg15,heroImg16,
               heroImg17,heroImg18,heroImg19,heroImg20,heroImg21,heroImg22,heroImg23,heroImg24,
@@ -128,7 +128,7 @@ const gameData = {
         h: 250
     },
     
-    monsters: { //Knarik
+    monsters: {
 
         multimouth: {
             pic: multimouthImg,
@@ -165,12 +165,12 @@ const gameData = {
 
     },
 
-    exam: { //Anna
+    exam: {
         pic: examImg,
-        x1: 7500,
-        x2: 16200,
-        x3: 25000,
-        x4: 32000,
+        x1: 8000,
+        x2: 17000,
+        x3: 25500,
+        x4: 35500,
         y: 0,
         xDelta: 2,
         yDelta: 5,
@@ -178,9 +178,9 @@ const gameData = {
         h: 600,
     },
 
-    ninja: { //Anna
+    ninja: { 
         pic: [ninjaImg, ninjahookImg],
-        x: 14000,
+        x: 5000,
         y: floorYm - 65,
         xDelta: 2,
         yDelta: 5,
@@ -189,7 +189,7 @@ const gameData = {
         h: 250
     },
 
-    background: { //Tiko
+    background: {
         pic1: background1,
         pic2: background2,
         pic3: background3,
@@ -198,15 +198,15 @@ const gameData = {
         w: 1500
     },
 
-    score: { //Tiko
+    score: {
         APoint: 5,
         FPoint: 0,
         lvlCountA: [10, 9, 8, 7],
         lvlCountF: [4, 6, 8, 10]
     },
 
-    cloud: { //Anna
-        x: 14000,
+    cloud: { 
+        x: 5000,
         y: floorYm - 265,
         w: 300,
         h: 100,
@@ -216,17 +216,17 @@ const gameData = {
 
 };
 
-const hero = gameData.hero; //Tiko
-const multimouth = gameData.monsters.multimouth; //Knarik
+const hero = gameData.hero;
+const multimouth = gameData.monsters.multimouth;
 const octopus = gameData.monsters.octopus;
 const devil = gameData.monsters.devil;
-const exam = gameData.exam; //Anna
+const exam = gameData.exam; 
 const ninja = gameData.ninja;
-const monsters = [multimouth, octopus, devil]; //Knarik
-const score = gameData.score; //Tiko
+const monsters = [multimouth, octopus, devil];
+const score = gameData.score;
 const background = gameData.background;
-const cloud = gameData.cloud; //Anna
-const arrayA = []; //Tiko
+const cloud = gameData.cloud; 
+const arrayA = [];
 const arrayF = [];
 let isJumping = false;
 let isFalling = false;
@@ -235,6 +235,7 @@ let isMoving = false;
 let level = 1;
 let Death = false;
 let pointLose = false;
+let monsterLose = false;
 let whichLevel = Math.floor(gameData.hero.x / gameData.background.w * 5);
 let heroCondition = 1;
 gameData.hero.x = gameData.background.w * 5 * whichLevel;
@@ -251,7 +252,7 @@ const forEach = function(arr, func) {
     helper(0);
 };
 
-const createPoints = function(level,extra) { //Tiko
+const createPoints = function(level,extra) {
 
     const pointsLoop = function(count, arr, pic, point, yVal1, yVal2) {
 
@@ -271,7 +272,7 @@ const createPoints = function(level,extra) { //Tiko
     pointsLoop(score.lvlCountF[level - 1], 0, FPointImg, arrayF, 150, 400);
 }
 
-const drawPoints = function() { //Tiko
+const drawPoints = function() {
 
     const makePoints = function(arr, point, img) {
 
@@ -289,7 +290,7 @@ const drawPoints = function() { //Tiko
 
 const draw = function() {
 
-    for (i = 0; i < 5; i++) { //Tiko
+    for (i = 0; i < 5; i++) {
         context.drawImage(background.pic1, background.x + i * background.w, 0, background.w, canvas.height);
     }
     for (i = 5; i < 10; i++) {
@@ -302,31 +303,41 @@ const draw = function() {
         context.drawImage(background.pic4, background.x + i * background.w, 0, background.w, canvas.height);
     }
 
-    context.font = '20px Arial'; //Tiko
+    context.font = '60px Arial'
+    context.fillStyle = 'blue'
+    context.fillText('Press Right Arrow To Move Right',background.x+150,150);
+    context.fillText('Press Up Arrow To Jump',background.x+260,200);
+    context.fillText('Collect A-s To Score Points',background.x+230,250);
+    context.fillText('Avoid F-s! If You Have 5 Or More A-s,',background.x+100,300);
+    context.fillText('You Will Lose 5 A-s', background.x+350,350)
+    context.fillText('If Not, F Will Kill You',background.x+340,400);
+    context.fillText('Avoid Monsters, They Will Kill You',background.x+150,450);
+
+    context.font = '20px Arial';
     context.drawImage(APointImg, 0, 0, 30, 30);
 
     context.fillStyle = '#ffff00';
     context.fillText('X', 40, 21);
     context.fillText(score.APoint, 65, 21);
 
-    if(Death) { //Knarik
+    if(Death) {
         isFalling = true;
         context.drawImage(replay, 500, 200, 200, 200);
     }
 
-    forEach(monsters, function(monsters) { //Knarik
+    forEach(monsters, function(monsters) {
         context.drawImage(monsters.pic, monsters.x1, monsters.y, monsters.w, monsters.h);
         context.drawImage(monsters.pic, monsters.x2, monsters.y, monsters.w, monsters.h);
     })
 
-    context.drawImage(hero.pic[imgNum], hero.x - hero.w / 3, hero.y, hero.w, hero.h); //Tiko
-    context.drawImage(exam.pic, exam.x1, exam.y, exam.w, exam.h); //Anna
+    context.drawImage(hero.pic[imgNum], hero.x - hero.w / 3, hero.y, hero.w, hero.h);
+    context.drawImage(exam.pic, exam.x1, exam.y, exam.w, exam.h); 
     context.drawImage(exam.pic, exam.x2, exam.y, exam.w, exam.h);
     context.drawImage(exam.pic, exam.x3, exam.y, exam.w, exam.h);
     context.drawImage(exam.pic, exam.x4, exam.y, exam.w, exam.h);
     move();
 
-    if (ninja.x - hero.x < 600) { //Anna
+    if (ninja.x - hero.x < 600) { 
         context.drawImage(ninja.pic[1], ninja.x, ninja.y, ninja.w[1], ninja.h);
         context.drawImage(cloud.pic, cloud.x, cloud.y, cloud.w, cloud.h);
         context.fillStyle = 'white';
@@ -345,6 +356,21 @@ const draw = function() {
         context.font = '70px Arial';
         context.fillStyle = 'yellow';
         context.fillText('You Got Too Many Fs!',270,500)
+    }
+    if(monsterLose){
+        context.font = '70px Arial';
+        context.fillStyle = 'yellow';
+        context.fillText('You Failed The Course!',250,500)
+    }
+
+    if(background.x <= -30500 && heroCondition === 4){
+        heroCondition = 3;
+    }
+    if(background.x <= -31000 && heroCondition === 3){
+        heroCondition = 2;
+    }
+    if(background.x <= -31500 && heroCondition === 2){
+        heroCondition = 1;
     }
 
     if(background.x <= -30000){
@@ -373,31 +399,31 @@ const draw = function() {
 
 const move = function() {
 
-    if (isMoving === true && !Death) { //Iren
+    if (isMoving === true && !Death) { 
 
         if(heroCondition === 1){
-            if (imgNum <= 6) { //Iren
+            if (imgNum <= 6) { 
                 imgNum++;
             } else {
                 imgNum = 0;
             }
         }
         if(heroCondition === 2){
-            if (imgNum <= 14) { //Iren
+            if (imgNum <= 14) { 
                 imgNum++;
             } else {
                 imgNum = 8;
             }
         }
         if(heroCondition === 3){
-            if (imgNum <= 22) { //Iren
+            if (imgNum <= 22) { 
                 imgNum++;
             } else {
                 imgNum = 16;
             }
         }
         if(heroCondition === 4){
-            if (imgNum <= 30) { //Iren
+            if (imgNum <= 30) { 
                 imgNum++;
             } else {
                 imgNum = 24;
@@ -408,20 +434,20 @@ const move = function() {
 
     if (isMoving === true) {
 
-        if (Death) { //Tiko
+        if (Death) {
             return;
         }
 
-        background.x -= 5; //Tiko
+        background.x -= 5;
 
-        for (let i = 0; i <= arrayA.length - 1; i++) { //Tiko
+        for (let i = 0; i <= arrayA.length - 1; i++) {
             arrayA[i].x -= 5;
         }
         for (let i = 0; i <= arrayF.length - 1; i++) {
             arrayF[i].x -= 5;
         }
 
-        forEach(monsters, function(monsters) { //Knarik,Anna
+        forEach(monsters, function(monsters) {
             monsters.x1 -= monsters.xDelta;
             monsters.x2 -= monsters.xDelta;
             ninja.x -= ninja.xDelta;
@@ -436,7 +462,7 @@ const move = function() {
 
 const update = function() {
 
-    hero.y += hero.yDelta; //Tiko
+    hero.y += hero.yDelta;
 
     for (let i = 0; i <= arrayA.length - 1; i++) {
         if (arrayA[i].x <= hero.x + hero.w / 3 && arrayA[i].x + 30 >= hero.x &&
@@ -459,15 +485,16 @@ const update = function() {
         }
     };
 
-    const collision = function(a) { //Knarik
-         forEach(monsters, function(monsters) {
-           if (hero.x + (hero.w / 3) >= a + 80 && hero.x <= a + monsters.w - 80 && hero.y + hero.h >= monsters.y + 80) {
-               Death = true;
-           }
-         })
+    const collision = function(a) {
+        forEach(monsters, function(monsters) {
+            if (hero.x + (hero.w / 3) >= a + 80 && hero.x <= a + monsters.w - 80 && hero.y + hero.h >= monsters.y + 80) {
+                Death = true;
+                monsterLose = true;
+            }
+        })
     }
 
-    forEach(monsters, function(monsters) { //Knarik
+    forEach(monsters, function(monsters) {
         collision(monsters.x1);
         collision(monsters.x2);
     })
@@ -484,17 +511,14 @@ const update = function() {
         }
     };
 
-    if (hero.x + (hero.w / 3) - 300 >= exam.x1) {
+    if (hero.x + (hero.w / 3) - 300 >= exam.x1 && background.x >= -28000) {
         heroCondition = 2;
     }
-    if (hero.x + (hero.w / 3) - 300 >= exam.x2) {
+    if (hero.x + (hero.w / 3) - 300 >= exam.x2 && background.x >= -28000) {
         heroCondition = 3;
     }
-    if (hero.x + (hero.w / 3) - 300 >= exam.x3) {
+    if (hero.x + (hero.w / 3) - 300 >= exam.x3 && background.x >= -28000) {
         heroCondition = 4;
-    }
-    if (hero.x + (hero.w / 3) - 300 >= exam.x4) {
-        heroCondition = 5;
     }
 
 
@@ -503,7 +527,7 @@ const update = function() {
     examCollision(gameData.exam.x3);
     examCollision(gameData.exam.x4);
 
-    const devilx = [devil.x1, devil.x2]; //Knarik
+    const devilx = [devil.x1, devil.x2];
     forEach(devilx, function(devilx) {
         if (devilx - hero.x <= 1000) {
             devil.xDelta = 10;
@@ -512,7 +536,7 @@ const update = function() {
         }
     });
 
-    const octopusx = [octopus.x1, octopus.x2]; //Knarik
+    const octopusx = [octopus.x1, octopus.x2];
     forEach(octopusx, function(octopusx) {
         if (octopusx - hero.x <= 1000) {
             octopus.xDelta = 8;
@@ -522,7 +546,7 @@ const update = function() {
         }
     });
 
-    const multimouthx = [multimouth.x1, multimouth.x2]; //Knarik
+    const multimouthx = [multimouth.x1, multimouth.x2];
     forEach(multimouthx, function(multimouthx) {
         if (multimouthx - hero.x <= 1000) {
             multimouth.xDelta = 8;
@@ -532,7 +556,7 @@ const update = function() {
         }
     });
 
-    if(background.x <= -6500 && level === 1){ //Tiko
+    if(background.x <= -6500 && level === 1){
         level++;
         createPoints(level,1000);
         monsterPos();
@@ -555,7 +579,7 @@ const update = function() {
     }
 }
 
-const jump = function() { //Tiko
+const jump = function() {
 
     if (isJumping === true) {
         if(heroCondition === 1){
@@ -603,12 +627,12 @@ const loop = function() { //EVERYONE WILL SAY THIS
     context.clearRect(0, 0, 1200, 600);
     update();
     draw();
-    jump(); 
+    jump();
     drawPoints();
     requestAnimationFrame(loop);
 }
 
-const monsterPos = function() { //Knarik
+const monsterPos = function() {
 
     const position = [1500]
     const createPositions = function(num) {
@@ -642,14 +666,14 @@ const monsterPos = function() { //Knarik
     })
 }
 
-const runAnimation = () => { //Anna
+const runAnimation = () => { 
     createPoints(level,0);
     monsterPos();
     loop();
 }
 runAnimation();
 
-document.addEventListener('keydown', function(event) { //Iren
+document.addEventListener('keydown', function(event) { 
 
     if (event.keyCode === rightKey) {
         isMoving = true;
@@ -682,7 +706,7 @@ document.addEventListener('keydown', function(event) { //Iren
     }
 }, false);
 
-document.addEventListener('keyup', function(event) { //Iren
+document.addEventListener('keyup', function(event) { 
     if (event.keyCode === rightKey) {
         isMoving = false;
         if(heroCondition === 1){
@@ -700,7 +724,7 @@ document.addEventListener('keyup', function(event) { //Iren
     }
 }, false)
 
-canvas.addEventListener('click', function(e) { //Iren
+canvas.addEventListener('click', function(e) { 
     if (Death) {
         if (Math.sqrt((e.offsetX - 500) ** 2 + (e.offsetY - 300) ** 2) < 100) {
             document.location.reload();
