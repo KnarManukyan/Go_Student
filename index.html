@@ -1,0 +1,34 @@
+<html>
+   <head>
+      <link href="./src/style/style.css" type="text/css" rel="stylesheet">
+      <title>Go student, Go!</title>
+   </head>
+   <body style="background-color: #353434;">
+      <audio id="track" autoplay="autoplay" loop="loop">
+         <source src="./assets/sound.mp3" type="audio/mpeg" />
+         <source src="./assets/sound.wav" type="audio/wav" />
+         <source src="./assets/sound.ogg" type="audio/ogg" />
+      </audio>
+      <ul>
+         <li><a class="active" href="index.html">Game</a></li>
+         <li class="dropdown">
+            <a href="javascript:void(0)" class="dropbtn">Contact</a>
+            <div class="dropdown-content">
+               <a href="creators.html">Creators</a>
+               <a href="feedback.html">For feedback</a>
+            </div>
+         </li>
+         <li class="dropdown">
+            <a href="javascript:void(0)" class="dropbtn">About</a>
+            <div class="dropdown-content">
+               <a href="https://www.youtube.com/watch?v=FjFRd72bR0Q" target="_blank">Demo</a>
+               <a href="description.html">Description</a>
+               <a href="comics.html">Comics</a>
+            </div>
+         </li>
+      </ul>
+      <div class="unmute" onclick="document.getElementById('track').muted = !document.getElementById('track').muted;$(this).toggleClass('mute')"></div>
+      <canvas id="canvas" width="1200" height="600" style="border:1px solid #000000;"></canvas>
+      <script src="./src/js/script.js"> </script>
+   </body>
+</html>
