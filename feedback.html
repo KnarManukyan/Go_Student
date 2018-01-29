@@ -24,15 +24,47 @@
       </ul>
       <h1 style="color:#E8100C"> Feel free to write any suggestions </h1>
       <img src="http://www.reactiongifs.com/r/tmhnks.gif" alt="Tom Hanks typing" width="600px" height="400px">
-      <form style="float:right; margin-right:350px; color: white" action="an.tatinyan@gmail.com" method="post" enctype="text/plain">
+      <!--Use floats to make two divs to stand alongside-->
+      <div style="float:right ; width: 50%;">
+         <!--//Please put any text in <p> tag <-->
          Name:<br>
-         <input type="text" name="name"><br>
+         <!--Use div blocks to seperate each individual blocks <br> is not used for that-->
+         <input type="text" name="name" id="feedbackName"><br>
          E-mail:<br>
-         <input type="text" name="mail"><br>
+         <input type="email" name="mail" id="feedbackEmail"><br>
          Comment:<br>
-         <input type="text" name="comment" size="50"><br><br>
-         <input type="submit" value="Send">
+         <input type="text" name="comment" size="50" id="feedbackContent"><br><br>
+         <input type="submit" value="Send" id="submitFeedback">
          <input type="reset" value="Reset">
-      </form>
+      </div>
    </body>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+   <script>
+
+      //Event Listener for feedback submit button
+    $('#submitFeedback').on('click' , function () {
+        //Gets values of fields
+         var name = $('#feedbackName').val();
+         var email = $('#feedbackEmail').val();
+         var content = $('#feedbackContent').val();
+        //Makes ajax request to server (This means page will not be restarted but request will be made)
+        $.ajax({
+            url: 'src/php/feedbackSendController.php',
+            dataType: 'text',
+            type: 'post',
+            contentType: 'application/x-www-form-urlencoded',
+            data: {
+                feedbackName: name,
+                feedbackEmail: email,
+                feedbackContent: content
+            },
+            success: function (data) {
+                alert(data);
+            },
+            error: function () {
+                alert('Something went wrong. Please try again later');
+            }
+        })
+    });
+</script>
 </html>

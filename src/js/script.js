@@ -1,11 +1,13 @@
-const withAssetsPath = (src) => `./assets/${src}`; 
+const withAssetsPath = (src) =
+>
+`./assets/${src}`;
 const audioMonster = new Audio(withAssetsPath('monster.mp3'));
 const audioLaugh = new Audio(withAssetsPath('laugh.mp3'));
 
 const canvas = document.getElementById('canvas');
 const context = canvas.getContext('2d');
 
-const rand = function(num) {
+const rand = function (num) {
     return Math.floor(Math.random() * num);
 }
 
@@ -116,10 +118,10 @@ const floorYm = 400;
 const gameData = {
 
     hero: {
-        pic: [heroImg1,heroImg2,heroImg3,heroImg4,heroImg5,heroImg6,heroImg7,heroImg8,
-              heroImg9,heroImg10,heroImg11,heroImg12,heroImg13,heroImg14,heroImg15,heroImg16,
-              heroImg17,heroImg18,heroImg19,heroImg20,heroImg21,heroImg22,heroImg23,heroImg24,
-              heroImg25,heroImg26,heroImg27,heroImg28,heroImg29,heroImg30,heroImg31,heroImg32],
+        pic: [heroImg1, heroImg2, heroImg3, heroImg4, heroImg5, heroImg6, heroImg7, heroImg8,
+            heroImg9, heroImg10, heroImg11, heroImg12, heroImg13, heroImg14, heroImg15, heroImg16,
+            heroImg17, heroImg18, heroImg19, heroImg20, heroImg21, heroImg22, heroImg23, heroImg24,
+            heroImg25, heroImg26, heroImg27, heroImg28, heroImg29, heroImg30, heroImg31, heroImg32],
         x: 0,
         y: floorY,
         xDelta: 0,
@@ -127,7 +129,7 @@ const gameData = {
         w: 350,
         h: 250
     },
-    
+
     monsters: {
 
         multimouth: {
@@ -178,7 +180,7 @@ const gameData = {
         h: 600,
     },
 
-    ninja: { 
+    ninja: {
         pic: [ninjaImg, ninjahookImg],
         x: 5000,
         y: floorYm - 65,
@@ -205,7 +207,7 @@ const gameData = {
         lvlCountF: [4, 6, 8, 10]
     },
 
-    cloud: { 
+    cloud: {
         x: 5000,
         y: floorYm - 265,
         w: 300,
@@ -220,12 +222,12 @@ const hero = gameData.hero;
 const multimouth = gameData.monsters.multimouth;
 const octopus = gameData.monsters.octopus;
 const devil = gameData.monsters.devil;
-const exam = gameData.exam; 
+const exam = gameData.exam;
 const ninja = gameData.ninja;
 const monsters = [multimouth, octopus, devil];
 const score = gameData.score;
 const background = gameData.background;
-const cloud = gameData.cloud; 
+const cloud = gameData.cloud;
 const arrayA = [];
 const arrayF = [];
 let isJumping = false;
@@ -241,8 +243,8 @@ let heroCondition = 1;
 gameData.hero.x = gameData.background.w * 5 * whichLevel;
 
 
-const forEach = function(arr, func) {
-    const helper = function(index) {
+const forEach = function (arr, func) {
+    const helper = function (index) {
         if (index === arr.length) {
             return;
         }
@@ -252,16 +254,16 @@ const forEach = function(arr, func) {
     helper(0);
 };
 
-const createPoints = function(level,extra) {
+const createPoints = function (level, extra) {
 
-    const pointsLoop = function(count, arr, pic, point, yVal1, yVal2) {
+    const pointsLoop = function (count, arr, pic, point, yVal1, yVal2) {
 
         if (count <= 0) {
             return;
         }
         point[arr] = {
             img: pic,
-            x: rand(5*background.w-1000) + extra,
+            x: rand(5 * background.w - 1000) + extra,
             y: rand(yVal1) + yVal2
         }
 
@@ -272,9 +274,9 @@ const createPoints = function(level,extra) {
     pointsLoop(score.lvlCountF[level - 1], 0, FPointImg, arrayF, 150, 400);
 }
 
-const drawPoints = function() {
+const drawPoints = function () {
 
-    const makePoints = function(arr, point, img) {
+    const makePoints = function (arr, point, img) {
 
         if (arr === point.length) {
             return;
@@ -288,7 +290,7 @@ const drawPoints = function() {
     makePoints(0, arrayF, FPointImg);
 }
 
-const draw = function() {
+const draw = function () {
 
     for (i = 0; i < 5; i++) {
         context.drawImage(background.pic1, background.x + i * background.w, 0, background.w, canvas.height);
@@ -310,24 +312,24 @@ const draw = function() {
     context.fillText('X', 40, 21);
     context.fillText(score.APoint, 65, 21);
 
-    if(Death) {
+    if (Death) {
         isFalling = true;
         context.drawImage(replay, 500, 200, 200, 200);
     }
 
-    forEach(monsters, function(monsters) {
+    forEach(monsters, function (monsters) {
         context.drawImage(monsters.pic, monsters.x1, monsters.y, monsters.w, monsters.h);
         context.drawImage(monsters.pic, monsters.x2, monsters.y, monsters.w, monsters.h);
     })
 
     context.drawImage(hero.pic[imgNum], hero.x - hero.w / 3, hero.y, hero.w, hero.h);
-    context.drawImage(exam.pic, exam.x1, exam.y, exam.w, exam.h); 
+    context.drawImage(exam.pic, exam.x1, exam.y, exam.w, exam.h);
     context.drawImage(exam.pic, exam.x2, exam.y, exam.w, exam.h);
     context.drawImage(exam.pic, exam.x3, exam.y, exam.w, exam.h);
     context.drawImage(exam.pic, exam.x4, exam.y, exam.w, exam.h);
     move();
 
-    if (ninja.x - hero.x < 600) { 
+    if (ninja.x - hero.x < 600) {
         context.drawImage(ninja.pic[1], ninja.x, ninja.y, ninja.w[1], ninja.h);
         context.drawImage(cloud.pic, cloud.x, cloud.y, cloud.w, cloud.h);
         context.fillStyle = 'white';
@@ -341,85 +343,85 @@ const draw = function() {
     } else {
         context.drawImage(ninja.pic[0], ninja.x, ninja.y, ninja.w[0], ninja.h);
     }
-    
-    if(pointLose){
+
+    if (pointLose) {
         context.font = '70px Arial';
         context.fillStyle = 'yellow';
-        context.fillText('You Got Too Many Fs!',270,500)
+        context.fillText('You Got Too Many Fs!', 270, 500)
     }
-    if(monsterLose){
+    if (monsterLose) {
         context.font = '70px Arial';
         context.fillStyle = 'yellow';
-        context.fillText('You Failed The Course!',250,500)
+        context.fillText('You Failed The Course!', 250, 500)
     }
 
-    if(background.x <= -30500 && heroCondition === 4){
+    if (background.x <= -30500 && heroCondition === 4) {
         heroCondition = 3;
     }
-    if(background.x <= -31000 && heroCondition === 3){
+    if (background.x <= -31000 && heroCondition === 3) {
         heroCondition = 2;
     }
-    if(background.x <= -31500 && heroCondition === 2){
+    if (background.x <= -31500 && heroCondition === 2) {
         heroCondition = 1;
     }
 
-    if(background.x <= -30000){
+    if (background.x <= -30000) {
         isMoving = true;
         hero.x += 2;
     }
-    if(background.x <= -32000 && background.x >= -33000){
+    if (background.x <= -32000 && background.x >= -33000) {
         context.font = '100px Arial';
         context.fillStyle = 'green';
         context.fillText('You Finally Did It!', 200, 300)
     }
-    if(background.x <= -34000){
-        context.clearRect(0,0,canvas.width,canvas.height)
+    if (background.x <= -34000) {
+        context.clearRect(0, 0, canvas.width, canvas.height)
     }
-    if(background.x <= -34100){
+    if (background.x <= -34100) {
         isMoving = false;
-        context.clearRect(0,0,canvas.width,canvas.height)
-        context.drawImage(officeImg,0,0,canvas.width,canvas.height);
+        context.clearRect(0, 0, canvas.width, canvas.height)
+        context.drawImage(officeImg, 0, 0, canvas.width, canvas.height);
         imgNum = 0;
-        context.drawImage(hero.pic[imgNum],450,floorY,350,250);
+        context.drawImage(hero.pic[imgNum], 450, floorY, 350, 250);
         context.font = '100px Arial';
         context.fillStyle = 'yellow';
-        context.fillText('You Got Hired!',280,100)
+        context.fillText('You Got Hired!', 280, 100)
     }
 };
 
-const move = function() {
+const move = function () {
 
-    if (isMoving === true && !Death) { 
+    if (isMoving === true && !Death) {
 
-        if(heroCondition === 1){
-            if (imgNum <= 6) { 
+        if (heroCondition === 1) {
+            if (imgNum <= 6) {
                 imgNum++;
             } else {
                 imgNum = 0;
             }
         }
-        if(heroCondition === 2){
-            if (imgNum <= 14) { 
+        if (heroCondition === 2) {
+            if (imgNum <= 14) {
                 imgNum++;
             } else {
                 imgNum = 8;
             }
         }
-        if(heroCondition === 3){
-            if (imgNum <= 22) { 
+        if (heroCondition === 3) {
+            if (imgNum <= 22) {
                 imgNum++;
             } else {
                 imgNum = 16;
             }
         }
-        if(heroCondition === 4){
-            if (imgNum <= 30) { 
+        if (heroCondition === 4) {
+            if (imgNum <= 30) {
                 imgNum++;
             } else {
                 imgNum = 24;
             }
         }
-        
+
     }
 
     if (isMoving === true) {
@@ -437,7 +439,7 @@ const move = function() {
             arrayF[i].x -= 5;
         }
 
-        forEach(monsters, function(monsters) {
+        forEach(monsters, function (monsters) {
             monsters.x1 -= monsters.xDelta;
             monsters.x2 -= monsters.xDelta;
             ninja.x -= ninja.xDelta;
@@ -450,7 +452,7 @@ const move = function() {
     }
 };
 
-const update = function() {
+const update = function () {
 
     hero.y += hero.yDelta;
 
@@ -473,10 +475,11 @@ const update = function() {
                 pointLose = true;
             }
         }
-    };
+    }
+    ;
 
-    const collision = function(a) {
-        forEach(monsters, function(monsters) {
+    const collision = function (a) {
+        forEach(monsters, function (monsters) {
             if (hero.x + (hero.w / 3) >= a + 80 && hero.x <= a + monsters.w - 80 && hero.y + hero.h >= monsters.y + 80) {
                 Death = true;
                 monsterLose = true;
@@ -484,11 +487,11 @@ const update = function() {
         })
     }
 
-    forEach(monsters, function(monsters) {
+    forEach(monsters, function (monsters) {
         collision(monsters.x1);
         collision(monsters.x2);
     })
-    const examCollision = function(b) {
+    const examCollision = function (b) {
         const play = document.getElementById('track');
         if (hero.x + (hero.w / 3) + 1000 >= b && hero.x <= b) {
             play.pause();
@@ -518,7 +521,7 @@ const update = function() {
     examCollision(gameData.exam.x4);
 
     const devilx = [devil.x1, devil.x2];
-    forEach(devilx, function(devilx) {
+    forEach(devilx, function (devilx) {
         if (devilx - hero.x <= 1000) {
             devil.xDelta = 10;
         } else if (devilx <= 0) {
@@ -527,7 +530,7 @@ const update = function() {
     });
 
     const octopusx = [octopus.x1, octopus.x2];
-    forEach(octopusx, function(octopusx) {
+    forEach(octopusx, function (octopusx) {
         if (octopusx - hero.x <= 1000) {
             octopus.xDelta = 8;
         }
@@ -537,7 +540,7 @@ const update = function() {
     });
 
     const multimouthx = [multimouth.x1, multimouth.x2];
-    forEach(multimouthx, function(multimouthx) {
+    forEach(multimouthx, function (multimouthx) {
         if (multimouthx - hero.x <= 1000) {
             multimouth.xDelta = 8;
         }
@@ -546,42 +549,42 @@ const update = function() {
         }
     });
 
-    if(background.x <= -6500 && level === 1){
+    if (background.x <= -6500 && level === 1) {
         level++;
-        createPoints(level,1000);
+        createPoints(level, 1000);
         monsterPos();
     }
-    if(background.x <= -14000 && level === 2){
+    if (background.x <= -14000 && level === 2) {
         level++;
-        createPoints(level,1000);
+        createPoints(level, 1000);
         monsterPos();
     }
-    if(background.x <= -21500 && level === 3){
+    if (background.x <= -21500 && level === 3) {
         level++;
-        createPoints(level,1000);
+        createPoints(level, 1000);
         monsterPos();
     }
 
-    if(Death){
+    if (Death) {
         const play = document.getElementById('track');
         play.pause();
         audioLaugh.play();
     }
 }
 
-const jump = function() {
+const jump = function () {
 
     if (isJumping === true) {
-        if(heroCondition === 1){
+        if (heroCondition === 1) {
             imgNum = 4;
         }
-        if(heroCondition === 2){
+        if (heroCondition === 2) {
             imgNum = 12;
         }
-        if(heroCondition === 3){
+        if (heroCondition === 3) {
             imgNum = 20;
         }
-        if(heroCondition === 4){
+        if (heroCondition === 4) {
             imgNum = 28;
         }
         if (isFalling === false) {
@@ -596,16 +599,16 @@ const jump = function() {
                 isJumping = false;
                 isFalling = false;
                 hero.yDelta = 0;
-                if(heroCondition === 1){
+                if (heroCondition === 1) {
                     imgNum = 0;
                 }
-                if(heroCondition === 2){
+                if (heroCondition === 2) {
                     imgNum = 8;
                 }
-                if(heroCondition === 3){
+                if (heroCondition === 3) {
                     imgNum = 16;
                 }
-                if(heroCondition === 4){
+                if (heroCondition === 4) {
                     imgNum = 24;
                 }
             }
@@ -613,7 +616,7 @@ const jump = function() {
     }
 }
 
-const loop = function() { //EVERYONE WILL SAY THIS
+const loop = function () { //EVERYONE WILL SAY THIS
     context.clearRect(0, 0, 1200, 600);
     update();
     draw();
@@ -622,11 +625,11 @@ const loop = function() { //EVERYONE WILL SAY THIS
     requestAnimationFrame(loop);
 }
 
-const monsterPos = function() {
+const monsterPos = function () {
 
     const position = [1500]
-    const createPositions = function(num) {
-        const helper = function(index) {
+    const createPositions = function (num) {
+        const helper = function (index) {
             if (index >= num) {
                 return;
             }
@@ -637,15 +640,15 @@ const monsterPos = function() {
     }
     createPositions(6);
 
-    const deletePos = function(x) {
+    const deletePos = function (x) {
         for (let i = 0; i < position.length; i++) {
             if (x === position[i]) {
                 position.splice(i, 1);
             }
         }
     }
-    
-    forEach(monsters, function(monsters) {
+
+    forEach(monsters, function (monsters) {
         monsters.x1 = position[rand(position.length)];
         deletePos(monsters.x1);
         monsters.x2 = position[rand(position.length)];
@@ -656,14 +659,16 @@ const monsterPos = function() {
     })
 }
 
-const runAnimation = () => { 
-    createPoints(level,0);
+const runAnimation = () =
+>
+{
+    createPoints(level, 0);
     monsterPos();
     loop();
 }
 runAnimation();
 
-document.addEventListener('keydown', function(event) { 
+document.addEventListener('keydown', function (event) {
 
     if (event.keyCode === rightKey) {
         isMoving = true;
@@ -677,16 +682,16 @@ document.addEventListener('keydown', function(event) {
         document.location.reload();
         isJumping = false;
         isFalling = false;
-        if(heroCondition === 1){
+        if (heroCondition === 1) {
             imgNum = 0;
         }
-        if(heroCondition === 2){
+        if (heroCondition === 2) {
             imgNum = 8;
         }
-        if(heroCondition === 3){
+        if (heroCondition === 3) {
             imgNum = 16;
         }
-        if(heroCondition === 4){
+        if (heroCondition === 4) {
             imgNum = 24;
         }
         isMoving = false;
@@ -696,26 +701,26 @@ document.addEventListener('keydown', function(event) {
     }
 }, false);
 
-document.addEventListener('keyup', function(event) { 
+document.addEventListener('keyup', function (event) {
     if (event.keyCode === rightKey) {
         isMoving = false;
-        if(heroCondition === 1){
+        if (heroCondition === 1) {
             imgNum = 0;
         }
-        if(heroCondition === 2){
+        if (heroCondition === 2) {
             imgNum = 8;
         }
-        if(heroCondition === 3){
+        if (heroCondition === 3) {
             imgNum = 16;
         }
-        if(heroCondition === 4){
+        if (heroCondition === 4) {
             imgNum = 24;
         }
     }
 }, false)
-canvas.addEventListener('click', function(e) { 
+canvas.addEventListener('click', function (e) {
     if (Death) {
-        if (Math.sqrt((e.offsetX - 500) ** 2 + (e.offsetY - 300) ** 2) < 100) {
+        if (Math.sqrt((e.offsetX - 500) * * 2 + (e.offsetY - 300) * * 2) < 100) {
             document.location.reload();
         }
     }
